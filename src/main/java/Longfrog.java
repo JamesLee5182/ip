@@ -14,7 +14,13 @@ public class Longfrog {
             String userInput = scanner.nextLine();
 
             Command c = parser.parse(userInput);
+            printLine();
+
             isExit = c.execute();
+
+            printEmptyLine();
+            printLine();
+            printEmptyLine();
         }
 
         scanner.close();

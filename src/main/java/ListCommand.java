@@ -17,12 +17,10 @@ public class ListCommand implements Command {
                 Task task = taskList.getTask(i);
                 if (task == null) break;
 
-                Longfrog.printMessage((i + 1) + ": " + task.getName());
+                Longfrog.printMessage((i + 1) + ": " + task);
             }
         }
 
-        Longfrog.printLine();
-        Longfrog.printEmptyLine();
         return false;
     }
 }

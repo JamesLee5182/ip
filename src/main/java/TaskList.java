@@ -1,6 +1,6 @@
 public class TaskList {
-    private static int maxCap = 100;
-    private Task[] list;
+    private final static int maxCap = 100;
+    private final Task[] list;
     private int index;
 
     public TaskList() {
@@ -17,8 +17,13 @@ public class TaskList {
         index++;
     }
 
+    public boolean taskExists(int index) {
+        if (index >= maxCap || index < 0) return false;
+        return list[index] != null;
+    }
+
     public Task getTask(int i) {
-        if (i >= maxCap) return null;
+        if (!taskExists(i)) return null;
 
         return list[i];
     }
