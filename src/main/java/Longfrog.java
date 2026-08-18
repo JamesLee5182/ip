@@ -1,17 +1,19 @@
 import java.util.Scanner;
 
 public class Longfrog {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        TaskList taskList = new TaskList();
+        Parser parser = new Parser(taskList);
 
         printGreetingMessage();
 
         boolean isExit = false;
-
         while (!isExit) {
             String userInput = scanner.nextLine();
 
-            Command c = Parser.parse(userInput);
+            Command c = parser.parse(userInput);
             isExit = c.execute();
         }
 
