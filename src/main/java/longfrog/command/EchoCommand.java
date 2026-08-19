@@ -1,3 +1,6 @@
+package longfrog.command;
+import longfrog.Longfrog;
+
 public class EchoCommand implements Command {
     private String echoMessage;
 

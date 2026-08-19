@@ -1,3 +1,7 @@
+package longfrog.command;
+import longfrog.task.*;
+import longfrog.Longfrog;
+
 public class AddCommand implements Command {
     private TaskList taskList;
     private Task task;

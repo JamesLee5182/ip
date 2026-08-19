@@ -1,3 +1,5 @@
+package longfrog.command;
+
 public interface Command {
     /**
      * Executes the command.

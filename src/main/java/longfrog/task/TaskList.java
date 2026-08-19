@@ -1,3 +1,5 @@
+package longfrog.task;
+
 public class TaskList {
     private final static int maxCap = 100;
     private final Task[] list;

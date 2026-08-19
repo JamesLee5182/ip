@@ -1,3 +1,8 @@
+package longfrog.parser;
+
+import longfrog.command.*;
+import longfrog.task.TaskList;
+
 /**
  * Handles the parsing of raw user text inputs into executable {@link Command} objects.
  */
@@ -9,7 +14,7 @@ public class Parser {
     }
 
     /**
-     * Parses the user input string and returns the corresponding {@code Command}.
+     * Parses the user input string and returns the corresponding {@code Longfrog.Commands.Command}.
      * @param fullInput The complete raw text entered by the user.
      * @return A {@link Command} ready for execution.
      */

@@ -1,3 +1,8 @@
+package longfrog;
+
+import longfrog.command.Command;
+import longfrog.parser.Parser;
+import longfrog.task.TaskList;
 import java.util.Scanner;
 
 public class Longfrog {
@@ -37,7 +42,7 @@ public class Longfrog {
                 + "                       |___/                    |___/ \n";
         printMessage(greeting);
         printLine();
-        printMessage("I am Longfrog.\nWhat do you want?");
+        printMessage("I am Longfrog.Longfrog.\nWhat do you want?");
         printLine();
     }
 

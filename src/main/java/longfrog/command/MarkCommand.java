@@ -1,3 +1,7 @@
+package longfrog.command;
+import longfrog.task.*;
+import longfrog.Longfrog;
+
 public class MarkCommand implements Command {
     private final Task task;
 
