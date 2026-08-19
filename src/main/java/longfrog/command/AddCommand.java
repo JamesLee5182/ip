@@ -3,12 +3,12 @@ import longfrog.task.*;
 import longfrog.Longfrog;
 
 public class AddCommand implements Command {
-    private TaskList taskList;
-    private Task task;
+    private final TaskList taskList;
+    private final Task task;
 
-    public AddCommand(TaskList taskList, String input) {
+    public AddCommand(TaskList taskList, Task task) {
         this.taskList = taskList;
-        this.task = new Task(input);
+        this.task = task;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package longfrog.parser;
 
 import longfrog.command.*;
-import longfrog.task.TaskList;
+import longfrog.task.*;
 
 /**
  * Handles the parsing of raw user text inputs into executable {@link Command} objects.
@@ -27,16 +27,39 @@ public class Parser {
         switch (keyword) {
             case "bye":
                 return new ExitCommand();
+
+            case "todo":
+                String todoName = words[1].trim();
+                return new AddCommand(this.taskList, new Todo(todoName));
+
+            case "deadline":
+                String[] deadlineParts = words[1].split(" /by ", 2);
+                String deadlineName = deadlineParts[0].trim();
+                String by = deadlineParts[1].trim();
+                return new AddCommand(this.taskList, new Deadline(deadlineName, by));
+
+            case "event":
+                String[] eventParts = words[1].split(" /from ", 2);
+                String eventName = eventParts[0].trim();
+
+                String[] timeParts = eventParts[1].split(" /to ", 2);
+                String from = timeParts[0].trim();
+                String to = timeParts[1].trim();
+                return new AddCommand(this.taskList, new Event(eventName, from, to));
+
             case "list":
                 return new ListCommand(this.taskList);
+
             case "mark":
                 int markIndex = parseIndex(words);
                 return new MarkCommand(this.taskList, markIndex);
+
             case "unmark":
                 int unmarkIndex = parseIndex(words);
                 return new UnmarkCommand(this.taskList, unmarkIndex);
+
             default:
-                return new AddCommand(this.taskList, fullInput);
+                return new ExitCommand();
         }
     }
 
