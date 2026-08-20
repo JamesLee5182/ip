@@ -1,6 +1,7 @@
 package longfrog;
 
 import longfrog.command.Command;
+import longfrog.exception.LongfrogException;
 import longfrog.parser.Parser;
 import longfrog.task.TaskList;
 import java.util.Scanner;
@@ -18,10 +19,13 @@ public class Longfrog {
         while (!isExit) {
             String userInput = scanner.nextLine();
 
-            Command c = parser.parse(userInput);
             printLine();
-
-            isExit = c.execute();
+            try {
+                Command c = parser.parse(userInput);
+                isExit = c.execute();
+            } catch (LongfrogException e) {
+                printMessage(e.getMessage());
+            }
 
             printEmptyLine();
             printLine();
