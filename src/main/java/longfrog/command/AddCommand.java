@@ -14,7 +14,7 @@ public class AddCommand implements Command {
     @Override
     public boolean execute() {
         taskList.addToList(task);
-        Longfrog.printMessage("Sure dude. I added: " + task.getName());
+        Longfrog.printMessage("Sure dude. I added: " + task);
         return false;
     }
 }
