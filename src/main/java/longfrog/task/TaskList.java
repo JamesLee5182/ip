@@ -38,6 +38,20 @@ public class TaskList {
     }
 
     /**
+     * Removes and returns the task at a zero-based index.
+     *
+     * @param index the zero-based task index
+     * @return the removed task, or {@code null} when the index is invalid
+     */
+    public Task removeTask(int index) {
+        if (!taskExists(index)) {
+            return null;
+        }
+
+        return list.remove(index);
+    }
+
+    /**
      * Checks whether a zero-based index identifies a stored task.
      *
      * @param index the zero-based task index

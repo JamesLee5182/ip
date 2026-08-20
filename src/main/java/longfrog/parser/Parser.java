@@ -72,6 +72,10 @@ public class Parser {
                 int unmarkIndex = parseIndex(words);
                 return new UnmarkCommand(this.taskList, unmarkIndex);
 
+            case "delete":
+                int deleteIndex = parseIndex(words);
+                return new DeleteCommand(this.taskList, deleteIndex);
+
             default:
                 throw new LongfrogException("Dude, I don't know that command.");
         }
