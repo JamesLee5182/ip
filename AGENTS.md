@@ -35,6 +35,10 @@ After every code update, complete these steps before handing off the change:
 1. Review `test/ui-test-plan.md` and update it when the change affects a command, console output, supported input, or UI test coverage.
 2. Invoke the project-local `test-ui` skill to run the recorded UI test cases. Follow its fail-fast reporting rules and include the console-session record in the handoff.
 
+## Javadoc coverage
+
+For production Java code added or modified from this point forward, maintain Javadoc comments on at least half of all public classes, constructors, and methods. Check this coverage before handing off a code change; document public APIs whose purpose or behaviour is not already obvious.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
