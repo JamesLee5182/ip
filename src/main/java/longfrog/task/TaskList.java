@@ -1,32 +1,63 @@
 package longfrog.task;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Stores the tasks in their display order.
+ *
+ * <p>An {@link ArrayList} is used so later delete operations can remove a task and shift following
+ * tasks without manually managing array capacity or indices.</p>
+ */
 public class TaskList {
-    private final static int maxCap = 100;
-    private final Task[] list;
-    private int index;
+    private final List<Task> list;
 
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
-        this.list = new Task[maxCap];
-        this.index = 0;
+        this.list = new ArrayList<>();
     }
 
+    /**
+     * Returns the number of tasks currently stored.
+     *
+     * @return the number of tasks
+     */
     public int getCount() {
-        return index;
+        return list.size();
     }
 
+    /**
+     * Appends a task to the end of the list.
+     *
+     * @param task the task to add
+     */
     public void addToList(Task task) {
-        list[index] = task;
-        index++;
+        list.add(task);
     }
 
+    /**
+     * Checks whether a zero-based index identifies a stored task.
+     *
+     * @param index the zero-based task index
+     * @return whether the index is within the list bounds
+     */
     public boolean taskExists(int index) {
-        if (index >= maxCap || index < 0) return false;
-        return list[index] != null;
+        return index >= 0 && index < list.size();
     }
 
-    public Task getTask(int i) {
-        if (!taskExists(i)) return null;
+    /**
+     * Returns the task at a zero-based index, if present.
+     *
+     * @param index the zero-based task index
+     * @return the task, or {@code null} when the index is invalid
+     */
+    public Task getTask(int index) {
+        if (!taskExists(index)) {
+            return null;
+        }
 
-        return list[i];
+        return list.get(index);
     }
 }
