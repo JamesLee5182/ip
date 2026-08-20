@@ -27,17 +27,18 @@ public class Parser {
         }
 
         String[] words = cleanInput.split(" ", 2);
-        String keyword = words[0].toLowerCase();
+        CommandType commandType = CommandType.fromKeyword(words[0])
+                .orElseThrow(() -> new LongfrogException("Dude, I don't know that command."));
 
-        switch (keyword) {
-            case "bye":
+        switch (commandType) {
+            case BYE:
                 return new ExitCommand();
 
-            case "todo":
+            case TODO:
                 String todoName = getArgument(words, "todo TASK");
                 return new AddCommand(this.taskList, new Todo(todoName));
 
-            case "deadline":
+            case DEADLINE:
                 String[] deadlineParts = getArgument(words, "deadline TASK /by TIME").split(" /by ", 2);
                 if (deadlineParts.length < 2 || deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
                     throw new LongfrogException("Dude, use: deadline TASK /by TIME");
@@ -46,7 +47,7 @@ public class Parser {
                 String by = deadlineParts[1].trim();
                 return new AddCommand(this.taskList, new Deadline(deadlineName, by));
 
-            case "event":
+            case EVENT:
                 String[] eventParts = getArgument(words, "event TASK /from TIME /to TIME").split(" /from ", 2);
                 if (eventParts.length < 2 || eventParts[0].isBlank() || eventParts[1].isBlank()) {
                     throw new LongfrogException("Dude, use: event TASK /from TIME /to TIME");
@@ -61,18 +62,18 @@ public class Parser {
                 String to = timeParts[1].trim();
                 return new AddCommand(this.taskList, new Event(eventName, from, to));
 
-            case "list":
+            case LIST:
                 return new ListCommand(this.taskList);
 
-            case "mark":
+            case MARK:
                 int markIndex = parseIndex(words);
                 return new MarkCommand(this.taskList, markIndex);
 
-            case "unmark":
+            case UNMARK:
                 int unmarkIndex = parseIndex(words);
                 return new UnmarkCommand(this.taskList, unmarkIndex);
 
-            case "delete":
+            case DELETE:
                 int deleteIndex = parseIndex(words);
                 return new DeleteCommand(this.taskList, deleteIndex);
 
