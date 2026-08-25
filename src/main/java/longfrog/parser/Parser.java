@@ -3,6 +3,11 @@ package longfrog.parser;
 import longfrog.command.*;
 import longfrog.exception.LongfrogException;
 import longfrog.task.*;
+import longfrog.util.FormatUtils;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 /**
  * Handles the parsing of raw user text inputs into executable {@link Command} objects.
@@ -23,12 +28,12 @@ public class Parser {
     public Command parse(String fullInput) throws LongfrogException {
         String cleanInput = fullInput.trim();
         if (cleanInput.isEmpty()) {
-            throw new LongfrogException("Dude, can you enter a command?");
+            throw new LongfrogException("Bruh, can you enter a command?");
         }
 
         String[] words = cleanInput.split(" ", 2);
         CommandType commandType = CommandType.fromKeyword(words[0])
-                .orElseThrow(() -> new LongfrogException("Dude, I don't know that command."));
+                .orElseThrow(() -> new LongfrogException("Bruh, I don't know that command."));
 
         switch (commandType) {
             case BYE:
@@ -39,27 +44,29 @@ public class Parser {
                 return new AddCommand(this.taskList, new Todo(todoName));
 
             case DEADLINE:
-                String[] deadlineParts = getArgument(words, "deadline TASK /by TIME").split(" /by ", 2);
+                String[] deadlineParts = getArgument(words, "deadline TASK /by d/M/yyyy HHmm").split(" /by ", 2);
                 if (deadlineParts.length < 2 || deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
-                    throw new LongfrogException("Dude, use: deadline TASK /by TIME");
+                    throw new LongfrogException("Dude, use: deadline TASK /by d/M/yyyy HHmm");
                 }
                 String deadlineName = deadlineParts[0].trim();
-                String by = deadlineParts[1].trim();
+                LocalDateTime by = parseDateTime(deadlineParts[1].trim());
+
                 return new AddCommand(this.taskList, new Deadline(deadlineName, by));
 
             case EVENT:
-                String[] eventParts = getArgument(words, "event TASK /from TIME /to TIME").split(" /from ", 2);
+                String[] eventParts = getArgument(words, "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm").split(" /from ", 2);
                 if (eventParts.length < 2 || eventParts[0].isBlank() || eventParts[1].isBlank()) {
-                    throw new LongfrogException("Dude, use: event TASK /from TIME /to TIME");
+                    throw new LongfrogException("Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }
                 String eventName = eventParts[0].trim();
 
                 String[] timeParts = eventParts[1].split(" /to ", 2);
                 if (timeParts.length < 2 || timeParts[0].isBlank() || timeParts[1].isBlank()) {
-                    throw new LongfrogException("Dude, use: event TASK /from TIME /to TIME");
+                    throw new LongfrogException("Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }
-                String from = timeParts[0].trim();
-                String to = timeParts[1].trim();
+                LocalDateTime from = parseDateTime(timeParts[0].trim());
+                LocalDateTime to = parseDateTime(timeParts[1].trim());
+
                 return new AddCommand(this.taskList, new Event(eventName, from, to));
 
             case LIST:
@@ -76,6 +83,11 @@ public class Parser {
             case DELETE:
                 int deleteIndex = parseIndex(words);
                 return new DeleteCommand(this.taskList, deleteIndex);
+
+            case CHECK: // or case "check":
+                String dateString = getArgument(words, "check d/M/yyyy (e.g., check 2/12/2019)");
+                LocalDate targetDate = parseDate(dateString);
+                return new CheckCommand(this.taskList, targetDate);
 
             default:
                 throw new LongfrogException("Dude, I don't know that command.");
@@ -95,6 +107,36 @@ public class Parser {
             throw new LongfrogException("Dude, use: " + usage);
         }
         return words[1].trim();
+    }
+
+    /**
+     * Parses a date-time string into a {@link LocalDateTime} object using the global format.
+     *
+     * @param dateTimeString the date-time text to parse (e.g., "2/12/2019 1800")
+     * @return the parsed LocalDateTime object
+     * @throws LongfrogException if the date-time format is invalid
+     */
+    private LocalDateTime parseDateTime(String dateTimeString) throws LongfrogException {
+        try {
+            return LocalDateTime.parse(dateTimeString, FormatUtils.INPUT_SAVE_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new LongfrogException("Dude, invalid date format! Use: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
+        }
+    }
+
+    /**
+     * Parses a date-only string into a {@link LocalDate} object.
+     *
+     * @param dateString the date string (e.g., "2/12/2019")
+     * @return the parsed LocalDate
+     * @throws LongfrogException if the date format is invalid
+     */
+    private LocalDate parseDate(String dateString) throws LongfrogException {
+        try {
+            return LocalDate.parse(dateString, FormatUtils.DATE_ONLY_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new LongfrogException("Dude, invalid date format! Use: d/M/yyyy (e.g., 2/12/2019)");
+        }
     }
 
     /**

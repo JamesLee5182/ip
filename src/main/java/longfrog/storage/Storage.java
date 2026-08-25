@@ -4,10 +4,13 @@ import longfrog.task.Deadline;
 import longfrog.task.Event;
 import longfrog.task.Task;
 import longfrog.task.Todo;
+import longfrog.util.FormatUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -59,37 +62,54 @@ public class Storage {
 
     /**
      * Parses a single line from the file into a Task object.
+     *
+     * @param line The raw line from the save file.
+     * @return The reconstructed Task object, or null if the line is corrupted/invalid.
      */
     private Task parseLine(String line) {
         String[] parts = line.split(" \\| ");
-        if (parts.length < 3) return null;
+        if (parts.length < 3) {
+            return null;
+        }
 
         String type = parts[0];
         boolean isDone = parts[1].equals("1");
         String name = parts[2];
 
-        Task task = null;
-        switch (type) {
-            case "T":
-                task = new Todo(name);
-                break;
-            case "D":
-                if (parts.length >= 4) {
-                    task = new Deadline(name, parts[3]);
-                }
-                break;
-            case "E":
-                if (parts.length >= 5) {
-                    task = new Event(name, parts[3], parts[4]);
-                }
-                break;
-        }
+        try {
+            Task task = null;
+            switch (type) {
+                case "T":
+                    task = new Todo(name);
+                    break;
+                case "D":
+                    if (parts.length >= 4) {
+                        LocalDateTime by = LocalDateTime.parse(parts[3], FormatUtils.INPUT_SAVE_FORMAT);
+                        task = new Deadline(name, by);
+                    }
+                    break;
+                case "E":
+                    if (parts.length >= 5) {
+                        LocalDateTime from = LocalDateTime.parse(parts[3], FormatUtils.INPUT_SAVE_FORMAT);
+                        LocalDateTime to = LocalDateTime.parse(parts[4], FormatUtils.INPUT_SAVE_FORMAT);
+                        task = new Event(name, from, to);
+                    }
+                    break;
+                default:
+                    return null;
+            }
 
-        if (task != null && isDone) {
-            task.markAsDone();
-        }
+            if (task != null && isDone) {
+                task.markAsDone();
+            }
 
-        return task;
+            return task;
+
+        } catch (DateTimeParseException e) {
+            // If a date is corrupted in the file, log a warning and skip that task
+            System.out.println("Warning: Skipping corrupted task entry due to invalid date format: " + line);
+            return null;
+        }
     }
 
     /**
