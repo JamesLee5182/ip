@@ -1,6 +1,6 @@
 package longfrog.task;
 
-public class Task {
+public abstract class Task {
     protected String name;
     protected boolean isDone;
 
@@ -29,4 +29,9 @@ public class Task {
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.name;
     }
+
+    /**
+     * Formats the task as a delimited string for saving to disk.
+     */
+    public abstract String toFileFormat();
 }
