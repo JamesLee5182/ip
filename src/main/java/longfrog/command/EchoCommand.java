@@ -1,5 +1,5 @@
 package longfrog.command;
-import longfrog.Ui;
+import longfrog.ui.Ui;
 
 /** Displays a fixed message surrounded by separators. */
 public class EchoCommand implements Command {

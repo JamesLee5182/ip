@@ -1,4 +1,4 @@
-package longfrog;
+package longfrog.ui;
 
 import java.util.Scanner;
 

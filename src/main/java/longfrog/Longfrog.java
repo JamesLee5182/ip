@@ -5,6 +5,7 @@ import longfrog.exception.LongfrogException;
 import longfrog.parser.Parser;
 import longfrog.task.TaskList;
 import longfrog.storage.Storage;
+import longfrog.ui.Ui;
 
 /** Coordinates command parsing, task persistence, and the console UI. */
 public class Longfrog {

@@ -1,6 +1,6 @@
 package longfrog.command;
 import longfrog.task.*;
-import longfrog.Ui;
+import longfrog.ui.Ui;
 
 /** Displays every task currently in the task list. */
 public class ListCommand implements Command {

@@ -1,6 +1,6 @@
 package longfrog.command;
 import longfrog.task.*;
-import longfrog.Ui;
+import longfrog.ui.Ui;
 
 /** Marks the selected task as incomplete. */
 public class UnmarkCommand implements Command {

@@ -1,6 +1,6 @@
 package longfrog.command;
 
-import longfrog.Ui;
+import longfrog.ui.Ui;
 import longfrog.task.Deadline;
 import longfrog.task.Event;
 import longfrog.task.Task;

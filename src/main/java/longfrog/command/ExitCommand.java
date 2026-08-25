@@ -1,5 +1,5 @@
 package longfrog.command;
-import longfrog.Ui;
+import longfrog.ui.Ui;
 
 /** Ends the application after displaying a farewell message. */
 public class ExitCommand implements Command {

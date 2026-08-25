@@ -1,6 +1,6 @@
 package longfrog.command;
 
-import longfrog.Ui;
+import longfrog.ui.Ui;
 
 public interface Command {
     /**

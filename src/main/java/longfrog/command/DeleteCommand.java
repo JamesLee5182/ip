@@ -1,6 +1,6 @@
 package longfrog.command;
 
-import longfrog.Ui;
+import longfrog.ui.Ui;
 import longfrog.task.Task;
 import longfrog.task.TaskList;
 
