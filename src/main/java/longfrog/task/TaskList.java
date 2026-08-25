@@ -20,6 +20,17 @@ public class TaskList {
     }
 
     /**
+     * Creates a task list with the specified list of tasks
+     */
+    public TaskList(List<Task> loadedTasks) {
+        this.list = loadedTasks != null ? loadedTasks : new ArrayList<>();
+    }
+
+    public List<Task> getAll() {
+        return list;
+    }
+
+    /**
      * Returns the number of tasks currently stored.
      *
      * @return the number of tasks

@@ -5,12 +5,15 @@ import longfrog.exception.LongfrogException;
 import longfrog.parser.Parser;
 import longfrog.task.TaskList;
 import java.util.Scanner;
+import longfrog.storage.Storage;
 
 public class Longfrog {
+    private static final String FILE_PATH = "data/longfrog.txt";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        TaskList taskList = new TaskList();
+        Storage storage = new Storage(FILE_PATH);
+        TaskList taskList = new TaskList(storage.load());
         Parser parser = new Parser(taskList);
 
         printGreetingMessage();
@@ -23,6 +26,7 @@ public class Longfrog {
             try {
                 Command c = parser.parse(userInput);
                 isExit = c.execute();
+                storage.save(taskList.getAll());
             } catch (LongfrogException e) {
                 printMessage(e.getMessage());
             }
