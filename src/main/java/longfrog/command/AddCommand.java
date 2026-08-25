@@ -1,7 +1,8 @@
 package longfrog.command;
 import longfrog.task.*;
-import longfrog.Longfrog;
+import longfrog.Ui;
 
+/** Adds one task and reports the added task through the UI. */
 public class AddCommand implements Command {
     private final TaskList taskList;
     private final Task task;
@@ -11,10 +12,11 @@ public class AddCommand implements Command {
         this.task = task;
     }
 
+    /** Adds the task and displays a confirmation. */
     @Override
-    public boolean execute() {
+    public boolean execute(Ui ui) {
         taskList.addToList(task);
-        Longfrog.printMessage("Sure dude. I added: " + task);
+        ui.showMessage("Sure dude. I added: " + task);
         return false;
     }
 }

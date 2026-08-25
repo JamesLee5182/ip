@@ -5,6 +5,7 @@ import longfrog.task.Event;
 import longfrog.task.Task;
 import longfrog.task.Todo;
 import longfrog.util.FormatUtils;
+import longfrog.exception.LongfrogException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -24,8 +25,11 @@ public class Storage {
 
     /**
      * Loads tasks from the file. Creates directory and file if they do not exist.
+     *
+     * @return the tasks loaded from storage
+     * @throws LongfrogException if the save file cannot be read or created
      */
-    public List<Task> load() {
+    public List<Task> load() throws LongfrogException {
         List<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
@@ -54,7 +58,7 @@ public class Storage {
             scanner.close();
 
         } catch (IOException e) {
-            System.out.println("Warning: Unable to load save file. Starting with an empty list.");
+            throw new LongfrogException("Unable to load save file.");
         }
 
         return tasks;
@@ -106,16 +110,18 @@ public class Storage {
             return task;
 
         } catch (DateTimeParseException e) {
-            // If a date is corrupted in the file, log a warning and skip that task
-            System.out.println("Warning: Skipping corrupted task entry due to invalid date format: " + line);
+            // Skip corrupted entries so valid saved tasks can still be recovered.
             return null;
         }
     }
 
     /**
      * Overwrites the file with the current list of tasks.
+     *
+     * @param tasks the tasks to save
+     * @return whether the tasks were saved successfully
      */
-    public void save(List<Task> tasks) {
+    public boolean save(List<Task> tasks) {
         try {
             File file = new File(filePath);
             if (file.getParentFile() != null) {
@@ -127,8 +133,9 @@ public class Storage {
                 writer.write(task.toFileFormat() + System.lineSeparator());
             }
             writer.close();
+            return true;
         } catch (IOException e) {
-            System.out.println("Error: Failed to save tasks to file.");
+            return false;
         }
     }
 }

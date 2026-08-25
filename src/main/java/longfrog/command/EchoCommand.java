@@ -1,6 +1,7 @@
 package longfrog.command;
-import longfrog.Longfrog;
+import longfrog.Ui;
 
+/** Displays a fixed message surrounded by separators. */
 public class EchoCommand implements Command {
     private String echoMessage;
 
@@ -9,12 +10,13 @@ public class EchoCommand implements Command {
         this.echoMessage = input;
     }
 
+    /** Displays the echo message. */
     @Override
-    public boolean execute() {
-        Longfrog.printLine();
-        Longfrog.printMessage(echoMessage);
-        Longfrog.printLine();
-        Longfrog.printEmptyLine();
+    public boolean execute(Ui ui) {
+        ui.showLine();
+        ui.showMessage(echoMessage);
+        ui.showLine();
+        ui.showEmptyLine();
         return false;
     }
 }

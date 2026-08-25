@@ -1,7 +1,8 @@
 package longfrog.command;
 import longfrog.task.*;
-import longfrog.Longfrog;
+import longfrog.Ui;
 
+/** Marks the selected task as complete. */
 public class MarkCommand implements Command {
     private final Task task;
 
@@ -9,13 +10,14 @@ public class MarkCommand implements Command {
         this.task = taskList.getTask(index);
     }
 
+    /** Marks the task and displays the outcome. */
     @Override
-    public boolean execute() {
+    public boolean execute(Ui ui) {
         if (task == null) {
-            Longfrog.printMessage("I can't do that. The task doesn't exist");
+            ui.showMessage("I can't do that. The task doesn't exist");
         } else {
             task.markAsDone();
-            Longfrog.printMessage("I marked the task: " + task.getName());
+            ui.showMessage("I marked the task: " + task.getName());
         }
 
         return false;

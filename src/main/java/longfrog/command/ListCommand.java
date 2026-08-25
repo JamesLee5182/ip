@@ -1,7 +1,8 @@
 package longfrog.command;
 import longfrog.task.*;
-import longfrog.Longfrog;
+import longfrog.Ui;
 
+/** Displays every task currently in the task list. */
 public class ListCommand implements Command {
     private TaskList taskList;
 
@@ -9,19 +10,20 @@ public class ListCommand implements Command {
         this.taskList = taskList;
     }
 
+    /** Displays the task list or its empty-list message. */
     @Override
-    public boolean execute() {
-        Longfrog.printMessage("ok buddy");
+    public boolean execute(Ui ui) {
+        ui.showMessage("ok buddy");
 
         int count = taskList.getCount();
         if (count == 0) {
-            Longfrog.printMessage("you didn't anything yet. What do you want from me?");
+            ui.showMessage("you didn't anything yet. What do you want from me?");
         } else {
             for (int i = 0; i < count; i++) {
                 Task task = taskList.getTask(i);
                 if (task == null) break;
 
-                Longfrog.printMessage((i + 1) + ": " + task);
+                ui.showMessage((i + 1) + ": " + task);
             }
         }
 

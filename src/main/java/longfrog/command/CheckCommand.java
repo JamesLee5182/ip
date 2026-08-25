@@ -1,6 +1,6 @@
 package longfrog.command;
 
-import longfrog.Longfrog;
+import longfrog.Ui;
 import longfrog.task.Deadline;
 import longfrog.task.Event;
 import longfrog.task.Task;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Lists deadlines and events that occur on a selected date. */
 public class CheckCommand implements Command {
     private final TaskList taskList;
     private final LocalDate targetDate;
@@ -20,8 +21,9 @@ public class CheckCommand implements Command {
         this.targetDate = targetDate;
     }
 
+    /** Finds matching tasks and displays them through the UI. */
     @Override
-    public boolean execute() {
+    public boolean execute(Ui ui) {
         List<Task> matchingTasks = new ArrayList<>();
 
         for (int i = 0; i < taskList.getCount(); i++) {
@@ -51,11 +53,11 @@ public class CheckCommand implements Command {
         // Print results
         String formattedDate = targetDate.format(FormatUtils.DATE_ONLY_FORMAT);
         if (matchingTasks.isEmpty()) {
-            Longfrog.printMessage("No deadlines or events found on " + formattedDate + ".");
+            ui.showMessage("No deadlines or events found on " + formattedDate + ".");
         } else {
-            Longfrog.printMessage("Here are the tasks happening on " + formattedDate + ":");
+            ui.showMessage("Here are the tasks happening on " + formattedDate + ":");
             for (int i = 0; i < matchingTasks.size(); i++) {
-                Longfrog.printMessage((i + 1) + ": " + matchingTasks.get(i));
+                ui.showMessage((i + 1) + ": " + matchingTasks.get(i));
             }
         }
 

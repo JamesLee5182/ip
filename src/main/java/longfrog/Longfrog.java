@@ -4,69 +4,59 @@ import longfrog.command.Command;
 import longfrog.exception.LongfrogException;
 import longfrog.parser.Parser;
 import longfrog.task.TaskList;
-import java.util.Scanner;
 import longfrog.storage.Storage;
 
+/** Coordinates command parsing, task persistence, and the console UI. */
 public class Longfrog {
     private static final String FILE_PATH = "data/longfrog.txt";
+    private final Storage storage;
+    private final TaskList taskList;
+    private final Ui ui;
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Storage storage = new Storage(FILE_PATH);
-        TaskList taskList = new TaskList(storage.load());
+    /** Creates Longfrog using the supplied task storage file. */
+    public Longfrog(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        TaskList loadedTasks;
+        try {
+            loadedTasks = new TaskList(storage.load());
+        } catch (LongfrogException e) {
+            ui.showLoadingError();
+            loadedTasks = new TaskList();
+        }
+        taskList = loadedTasks;
+    }
+
+    /** Starts the command loop and continues until the user enters {@code bye}. */
+    public void run() {
         Parser parser = new Parser(taskList);
 
-        printGreetingMessage();
+        ui.showGreeting();
 
         boolean isExit = false;
         while (!isExit) {
-            String userInput = scanner.nextLine();
+            String userInput = ui.readCommand();
 
-            printLine();
+            ui.showLine();
             try {
                 Command c = parser.parse(userInput);
-                isExit = c.execute();
-                storage.save(taskList.getAll());
+                isExit = c.execute(ui);
+                if (!storage.save(taskList.getAll())) {
+                    ui.showSavingError();
+                }
             } catch (LongfrogException e) {
-                printMessage(e.getMessage());
+                ui.showMessage(e.getMessage());
             }
 
-            printEmptyLine();
-            printLine();
-            printEmptyLine();
+            ui.showEmptyLine();
+            ui.showLine();
+            ui.showEmptyLine();
         }
 
-        scanner.close();
+        ui.close();
     }
 
-    public static void printGreetingMessage()
-    {
-        String greeting =
-                " _                             __                    \n"
-                + "| |       ___   _ __    __ _  / _| _ __   ___    __ _ \n"
-                + "| |      / _ \\ | '_ \\  / _` || |_ | '__| / _ \\  / _` |\n"
-                + "| |___  | (_) || | | || (_| ||  _|| |   | (_) || (_| |\n"
-                + "|_____|  \\___/ |_| |_| \\__, ||_|  |_|    \\___/  \\__, |\n"
-                + "                       |___/                    |___/ \n";
-        printMessage(greeting);
-        printLine();
-        printMessage("I am Longfrog.Longfrog.\nWhat do you want?");
-        printLine();
-    }
-
-    public static void printExitMessage() {
-        printMessage("I'm going to sleep. Bye.");
-    }
-
-    public static void printMessage(String message) {
-        System.out.println(message);
-    }
-
-    public static void printEmptyLine() {
-        printMessage("");
-    }
-
-    public static void printLine() {
-        printMessage("─".repeat(50));
+    public static void main(String[] args) {
+        new Longfrog(FILE_PATH).run();
     }
 }

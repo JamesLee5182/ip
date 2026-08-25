@@ -1,6 +1,6 @@
 package longfrog.command;
 
-import longfrog.Longfrog;
+import longfrog.Ui;
 import longfrog.task.Task;
 import longfrog.task.TaskList;
 
@@ -23,17 +23,15 @@ public class DeleteCommand implements Command {
     }
 
     /**
-     * Removes the selected task and reports the outcome to the user.
-     *
-     * @return {@code false} because deleting a task does not exit Longfrog
+     * Removes the selected task and displays the outcome.
      */
     @Override
-    public boolean execute() {
+    public boolean execute(Ui ui) {
         Task deletedTask = taskList.removeTask(index);
         if (deletedTask == null) {
-            Longfrog.printMessage("I can't do that. The task doesn't exist");
+            ui.showMessage("I can't do that. The task doesn't exist");
         } else {
-            Longfrog.printMessage("Sure dude. I deleted: " + deletedTask.getName());
+            ui.showMessage("Sure dude. I deleted: " + deletedTask.getName());
         }
 
         return false;
