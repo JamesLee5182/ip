@@ -13,7 +13,8 @@ public enum CommandType {
     LIST("list"),
     MARK("mark"),
     UNMARK("unmark"),
-    DELETE("delete");
+    DELETE("delete"),
+    CHECK("check");
 
     private final String keyword;
 
