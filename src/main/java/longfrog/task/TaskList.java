@@ -26,6 +26,11 @@ public class TaskList {
         this.list = loadedTasks != null ? loadedTasks : new ArrayList<>();
     }
 
+    /**
+     * Returns the tasks in their display order.
+     *
+     * @return the mutable task list used by the application
+     */
     public List<Task> getAll() {
         return list;
     }

@@ -3,25 +3,47 @@ package longfrog.task;
 import longfrog.util.FormatUtils;
 import java.time.LocalDateTime;
 
-/** Represents a task with a start and end date-time range. */
+/** Represents a task that occurs over a start and end date-time range. */
 public class Event extends Task {
     protected LocalDateTime from;
     protected LocalDateTime to;
 
+    /**
+     * Creates an event task.
+     *
+     * @param name the task description
+     * @param from the event start date and time
+     * @param to the event end date and time
+     */
     public Event(String name, LocalDateTime from, LocalDateTime to) {
         super(name);
         this.from = from;
         this.to = to;
     }
 
+    /**
+     * Returns the event start date and time.
+     *
+     * @return the event start
+     */
     public LocalDateTime getFrom() {
         return this.from;
     }
 
+    /**
+     * Returns the event end date and time.
+     *
+     * @return the event end
+     */
     public LocalDateTime getTo() {
         return this.to;
     }
 
+    /**
+     * Returns this event in its console display format.
+     *
+     * @return the formatted event
+     */
     @Override
     public String toString() {
         return "[E]" + super.toString()
@@ -29,6 +51,11 @@ public class Event extends Task {
                 + " to: " + this.to.format(FormatUtils.PRINT_FORMAT) + ")";
     }
 
+    /**
+     * Returns this event in the format used by the save file.
+     *
+     * @return the serialized event
+     */
     @Override
     public String toFileFormat() {
         return "E | " + (isDone ? "1" : "0") + " | " + this.name + " | "

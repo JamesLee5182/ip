@@ -20,6 +20,11 @@ import java.util.Scanner;
 public class Storage {
     private final String filePath;
 
+    /**
+     * Creates storage backed by the supplied file path.
+     *
+     * @param filePath the path of the save file
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
