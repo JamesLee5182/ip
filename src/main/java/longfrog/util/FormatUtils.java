@@ -2,6 +2,7 @@ package longfrog.util;
 
 import java.time.format.DateTimeFormatter;
 
+/** Provides shared date and time formats for parsing, persistence, and display. */
 public class FormatUtils {
     // Used for reading user input and saving/loading from the text file
     public static final DateTimeFormatter INPUT_SAVE_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");

@@ -5,8 +5,7 @@ import longfrog.ui.Ui;
 public class EchoCommand implements Command {
     private String echoMessage;
 
-    public EchoCommand(String input)
-    {
+    public EchoCommand(String input) {
         this.echoMessage = input;
     }
 

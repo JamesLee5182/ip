@@ -1,5 +1,6 @@
 package longfrog.command;
-import longfrog.task.*;
+import longfrog.task.Task;
+import longfrog.task.TaskList;
 import longfrog.ui.Ui;
 
 /** Marks the selected task as complete. */

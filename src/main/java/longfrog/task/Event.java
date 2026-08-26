@@ -3,6 +3,7 @@ package longfrog.task;
 import longfrog.util.FormatUtils;
 import java.time.LocalDateTime;
 
+/** Represents a task with a start and end date-time range. */
 public class Event extends Task {
     protected LocalDateTime from;
     protected LocalDateTime to;
