@@ -153,3 +153,25 @@ The complete expected output is the startup output plus one response block per i
   | `delete` | `Dude can you specify a task number like: delete 1` |
   | `list` | `ok buddy`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
   | `bye` | `I'm going to sleep. Bye.` |
+
+### TC-010: Find tasks by a case-insensitive description keyword
+
+- Aim: Verify `find KEYWORD` returns matching tasks in their original order and excludes non-matching tasks.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `todo read book` | `Sure dude. I added: [T][ ] read book` |
+  | `todo go running` | `Sure dude. I added: [T][ ] go running` |
+  | `deadline return book /by 2/12/2019 1800` | `Sure dude. I added: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `find BOOK` | `Here are the matching tasks in your list:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `bye` | `I'm going to sleep. Bye.` |
+
+### TC-011: Use the clearer date command
+
+- Aim: Verify `date d/M/yyyy` lists matching date-based tasks.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `deadline return book /by 2/12/2019 1800` | `Sure dude. I added: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `date 2/12/2019` | `Here are the tasks happening on 2/12/2019:`<br>`1: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `bye` | `I'm going to sleep. Bye.` |
