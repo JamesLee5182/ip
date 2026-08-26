@@ -16,9 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/** Persists tasks to and restores tasks from the application's save file. */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Creates storage backed by the supplied file path.
+     *
+     * @param filePath the path of the save file
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
