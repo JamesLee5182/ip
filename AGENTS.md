@@ -35,6 +35,12 @@ After every code update, complete these steps before handing off the change:
 1. Review `test/ui-test-plan.md` and update it when the change affects a command, console output, supported input, or UI test coverage.
 2. Invoke the project-local `test-ui` skill to run the recorded UI test cases. Follow its fail-fast reporting rules and include the console-session record in the handoff.
 
+## JUnit test coverage
+
+Maintain JUnit tests for approximately the top 50% highest-value production methods. Prioritize methods with complex control flow, core domain behaviour, parsing, persistence, validation, and other critical business logic; do not spend the target on trivial constructors, accessors, constants, or output wrappers.
+
+After every production code change, review and update the relevant JUnit tests so the changed behaviour remains covered and the 50% target continues to focus on the highest-value methods. Run the JUnit suite before handing off the change.
+
 ## Javadoc coverage
 
 For production Java code added or modified from this point forward, maintain Javadoc comments on at least half of all public classes, constructors, and methods. Check this coverage before handing off a code change; document public APIs whose purpose or behaviour is not already obvious.
