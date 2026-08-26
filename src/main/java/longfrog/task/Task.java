@@ -1,5 +1,6 @@
 package longfrog.task;
 
+/** Represents a task with a description and completion state. */
 public abstract class Task {
     protected String name;
     protected boolean isDone;
@@ -17,10 +18,12 @@ public abstract class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    /** Marks this task as complete. */
     public void markAsDone() {
         isDone = true;
     }
 
+    /** Marks this task as incomplete. */
     public void unmarkAsDone() {
         isDone = false;
     }

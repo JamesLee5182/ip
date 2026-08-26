@@ -57,6 +57,11 @@ public class Longfrog {
         ui.close();
     }
 
+    /**
+     * Starts Longfrog using its default save-file location.
+     *
+     * @param args command-line arguments, which are ignored
+     */
     public static void main(String[] args) {
         new Longfrog(FILE_PATH).run();
     }

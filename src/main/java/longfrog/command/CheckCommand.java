@@ -28,7 +28,9 @@ public class CheckCommand implements Command {
 
         for (int i = 0; i < taskList.getCount(); i++) {
             Task task = taskList.getTask(i);
-            if (task == null) continue;
+            if (task == null) {
+                continue;
+            }
 
             // 1. Check if it is a Deadline on this date
             if (task instanceof Deadline) {

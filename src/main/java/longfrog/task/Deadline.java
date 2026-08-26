@@ -3,6 +3,7 @@ package longfrog.task;
 import longfrog.util.FormatUtils;
 import java.time.LocalDateTime;
 
+/** Represents a task with a due date and time. */
 public class Deadline extends Task {
     protected LocalDateTime by;
 

@@ -1,8 +1,18 @@
 package longfrog.parser;
 
-import longfrog.command.*;
+import longfrog.command.AddCommand;
+import longfrog.command.CheckCommand;
+import longfrog.command.Command;
+import longfrog.command.DeleteCommand;
+import longfrog.command.ExitCommand;
+import longfrog.command.ListCommand;
+import longfrog.command.MarkCommand;
+import longfrog.command.UnmarkCommand;
 import longfrog.exception.LongfrogException;
-import longfrog.task.*;
+import longfrog.task.Deadline;
+import longfrog.task.Event;
+import longfrog.task.TaskList;
+import longfrog.task.Todo;
 import longfrog.util.FormatUtils;
 
 import java.time.LocalDate;
@@ -54,7 +64,8 @@ public class Parser {
                 return new AddCommand(this.taskList, new Deadline(deadlineName, by));
 
             case EVENT:
-                String[] eventParts = getArgument(words, "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm").split(" /from ", 2);
+                String[] eventParts = getArgument(words,
+                        "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm").split(" /from ", 2);
                 if (eventParts.length < 2 || eventParts[0].isBlank() || eventParts[1].isBlank()) {
                     throw new LongfrogException("Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }

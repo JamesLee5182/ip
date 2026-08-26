@@ -24,6 +24,10 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Project-specific requirements
 
+## Java coding standard
+
+For every production and test Java code change in this project, use the project-local `seedu-java-coding-standard` skill and follow its SE-EDU intermediate Java coding-standard rules.
+
 ## Java version:
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
@@ -43,7 +47,7 @@ After every production code change, review and update the relevant JUnit tests s
 
 ## Javadoc coverage
 
-For production Java code added or modified from this point forward, maintain Javadoc comments on at least half of all public classes, constructors, and methods. Check this coverage before handing off a code change; document public APIs whose purpose or behaviour is not already obvious.
+For production Java code added or modified from this point forward, maintain Javadoc comments on at least half of all non-private classes, constructors, and methods. Check this coverage before handing off a code change; document non-private APIs whose purpose or behaviour is not already obvious.
 
 ## Git
 
