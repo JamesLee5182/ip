@@ -43,7 +43,7 @@ After every production code change, review and update the relevant JUnit tests s
 
 ## Javadoc coverage
 
-For production Java code added or modified from this point forward, maintain Javadoc comments on at least half of all public classes, constructors, and methods. Check this coverage before handing off a code change; document public APIs whose purpose or behaviour is not already obvious.
+For production Java code added or modified from this point forward, maintain Javadoc comments on at least half of all non-private classes, constructors, and methods. Check this coverage before handing off a code change; document non-private APIs whose purpose or behaviour is not already obvious.
 
 ## Git
 
