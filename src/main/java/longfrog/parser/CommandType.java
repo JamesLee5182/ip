@@ -14,7 +14,8 @@ public enum CommandType {
     MARK("mark"),
     UNMARK("unmark"),
     DELETE("delete"),
-    CHECK("check");
+    DATE("date"),
+    FIND("find");
 
     private final String keyword;
 

@@ -1,8 +1,19 @@
 package longfrog.parser;
 
-import longfrog.command.*;
+import longfrog.command.AddCommand;
+import longfrog.command.Command;
+import longfrog.command.DateCommand;
+import longfrog.command.DeleteCommand;
+import longfrog.command.ExitCommand;
+import longfrog.command.FindCommand;
+import longfrog.command.ListCommand;
+import longfrog.command.MarkCommand;
+import longfrog.command.UnmarkCommand;
 import longfrog.exception.LongfrogException;
-import longfrog.task.*;
+import longfrog.task.Deadline;
+import longfrog.task.Event;
+import longfrog.task.TaskList;
+import longfrog.task.Todo;
 import longfrog.util.FormatUtils;
 
 import java.time.LocalDate;
@@ -44,7 +55,8 @@ public class Parser {
                 return new AddCommand(this.taskList, new Todo(todoName));
 
             case DEADLINE:
-                String[] deadlineParts = getArgument(words, "deadline TASK /by d/M/yyyy HHmm").split(" /by ", 2);
+                String[] deadlineParts = getArgument(words, "deadline TASK /by d/M/yyyy HHmm")
+                        .split(" /by ", 2);
                 if (deadlineParts.length < 2 || deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
                     throw new LongfrogException("Dude, use: deadline TASK /by d/M/yyyy HHmm");
                 }
@@ -54,7 +66,9 @@ public class Parser {
                 return new AddCommand(this.taskList, new Deadline(deadlineName, by));
 
             case EVENT:
-                String[] eventParts = getArgument(words, "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm").split(" /from ", 2);
+                String[] eventParts = getArgument(words,
+                        "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm")
+                        .split(" /from ", 2);
                 if (eventParts.length < 2 || eventParts[0].isBlank() || eventParts[1].isBlank()) {
                     throw new LongfrogException("Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }
@@ -84,10 +98,12 @@ public class Parser {
                 int deleteIndex = parseIndex(words);
                 return new DeleteCommand(this.taskList, deleteIndex);
 
-            case CHECK: // or case "check":
-                String dateString = getArgument(words, "check d/M/yyyy (e.g., check 2/12/2019)");
-                LocalDate targetDate = parseDate(dateString);
-                return new CheckCommand(this.taskList, targetDate);
+            case DATE:
+                return parseDateCommand(words);
+
+            case FIND:
+                String keyword = getArgument(words, "find KEYWORD");
+                return new FindCommand(this.taskList, keyword);
 
             default:
                 throw new LongfrogException("Dude, I don't know that command.");
@@ -140,12 +156,25 @@ public class Parser {
     }
 
     /**
+     * Parses a date command.
+     *
+     * @param words the command keyword and date argument
+     * @return a command that lists tasks occurring on the requested date
+     * @throws LongfrogException if the date argument is missing or invalid
+     */
+    private Command parseDateCommand(String[] words) throws LongfrogException {
+        String dateString = getArgument(words, "date d/M/yyyy (e.g., date 2/12/2019)");
+        LocalDate targetDate = parseDate(dateString);
+        return new DateCommand(this.taskList, targetDate);
+    }
+
+    /**
      * Extracts and validates the integer index from the command arguments.
      * @param words The split input array containing the keyword and argument.
      * @return The 0-based task index.
      */
     private int parseIndex(String[] words) throws LongfrogException {
-        // Check if the user didn't supply an argument
+        // Verify that the user supplied an argument.
         if (words.length < 2 || words[1].trim().isEmpty()) {
             throw new LongfrogException("Dude can you specify a task number like: " + words[0] + " 1");
         }

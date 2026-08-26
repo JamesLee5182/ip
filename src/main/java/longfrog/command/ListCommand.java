@@ -1,5 +1,6 @@
 package longfrog.command;
-import longfrog.task.*;
+import longfrog.task.Task;
+import longfrog.task.TaskList;
 import longfrog.ui.Ui;
 
 /** Displays every task currently in the task list. */
@@ -21,7 +22,9 @@ public class ListCommand implements Command {
         } else {
             for (int i = 0; i < count; i++) {
                 Task task = taskList.getTask(i);
-                if (task == null) break;
+                if (task == null) {
+                    break;
+                }
 
                 ui.showMessage((i + 1) + ": " + task);
             }

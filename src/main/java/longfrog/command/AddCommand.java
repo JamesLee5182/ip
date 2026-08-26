@@ -1,5 +1,6 @@
 package longfrog.command;
-import longfrog.task.*;
+import longfrog.task.Task;
+import longfrog.task.TaskList;
 import longfrog.ui.Ui;
 
 /** Adds one task and reports the added task through the UI. */

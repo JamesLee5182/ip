@@ -5,9 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import longfrog.command.AddCommand;
-import longfrog.command.CheckCommand;
+import longfrog.command.DateCommand;
 import longfrog.command.DeleteCommand;
 import longfrog.command.ExitCommand;
+import longfrog.command.FindCommand;
 import longfrog.command.ListCommand;
 import longfrog.command.MarkCommand;
 import longfrog.command.UnmarkCommand;
@@ -36,7 +37,8 @@ class ParserTest {
         assertInstanceOf(MarkCommand.class, parser.parse("mark 1"));
         assertInstanceOf(UnmarkCommand.class, parser.parse("unmark 1"));
         assertInstanceOf(DeleteCommand.class, parser.parse("delete 1"));
-        assertInstanceOf(CheckCommand.class, parser.parse("check 2/12/2019"));
+        assertInstanceOf(DateCommand.class, parser.parse("date 2/12/2019"));
+        assertInstanceOf(FindCommand.class, parser.parse("find book"));
     }
 
     @Test
@@ -80,9 +82,14 @@ class ParserTest {
     }
 
     @Test
-    void parse_checkWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
-        assertParseError("check", "Dude, use: check d/M/yyyy (e.g., check 2/12/2019)");
-        assertParseError("check tomorrow", "Dude, invalid date format! Use: d/M/yyyy (e.g., 2/12/2019)");
+    void parse_dateWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
+        assertParseError("date", "Dude, use: date d/M/yyyy (e.g., date 2/12/2019)");
+        assertParseError("date tomorrow", "Dude, invalid date format! Use: d/M/yyyy (e.g., 2/12/2019)");
+    }
+
+    @Test
+    void parse_findWithoutKeyword_throwsExceptionWithUsage() {
+        assertParseError("find", "Dude, use: find KEYWORD");
     }
 
     @Test
