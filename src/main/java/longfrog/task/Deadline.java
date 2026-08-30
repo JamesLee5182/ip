@@ -1,7 +1,8 @@
 package longfrog.task;
 
-import longfrog.util.FormatUtils;
 import java.time.LocalDateTime;
+
+import longfrog.util.FormatUtils;
 
 /** Represents a task that must be completed by a particular date and time. */
 public class Deadline extends Task {

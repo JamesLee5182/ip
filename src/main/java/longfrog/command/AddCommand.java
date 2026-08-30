@@ -8,6 +8,12 @@ public class AddCommand implements Command {
     private final TaskList taskList;
     private final Task task;
 
+    /**
+     * Creates a command that adds a task to the supplied list.
+     *
+     * @param taskList the list that receives the task
+     * @param task the task to add
+     */
     public AddCommand(TaskList taskList, Task task) {
         this.taskList = taskList;
         this.task = task;

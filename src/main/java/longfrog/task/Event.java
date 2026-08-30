@@ -1,7 +1,8 @@
 package longfrog.task;
 
-import longfrog.util.FormatUtils;
 import java.time.LocalDateTime;
+
+import longfrog.util.FormatUtils;
 
 /** Represents a task that occurs over a start and end date-time range. */
 public class Event extends Task {

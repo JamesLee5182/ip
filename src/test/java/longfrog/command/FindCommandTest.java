@@ -7,12 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
+import org.junit.jupiter.api.Test;
+
 import longfrog.task.Deadline;
 import longfrog.task.TaskList;
 import longfrog.task.Todo;
 import longfrog.ui.Ui;
-
-import org.junit.jupiter.api.Test;
 
 class FindCommandTest {
     @Test
