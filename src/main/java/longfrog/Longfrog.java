@@ -3,8 +3,8 @@ package longfrog;
 import longfrog.command.Command;
 import longfrog.exception.LongfrogException;
 import longfrog.parser.Parser;
-import longfrog.task.TaskList;
 import longfrog.storage.Storage;
+import longfrog.task.TaskList;
 import longfrog.ui.Ui;
 
 /** Coordinates command parsing, task persistence, and the console UI. */

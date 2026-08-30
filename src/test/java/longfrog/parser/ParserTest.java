@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import longfrog.command.AddCommand;
 import longfrog.command.DateCommand;
 import longfrog.command.DeleteCommand;
@@ -14,9 +17,6 @@ import longfrog.command.MarkCommand;
 import longfrog.command.UnmarkCommand;
 import longfrog.exception.LongfrogException;
 import longfrog.task.TaskList;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class ParserTest {
     private Parser parser;

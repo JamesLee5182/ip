@@ -1,8 +1,8 @@
 package longfrog.command;
 
-import longfrog.ui.Ui;
 import longfrog.task.Task;
 import longfrog.task.TaskList;
+import longfrog.ui.Ui;
 
 /**
  * Removes a task selected by its zero-based position in the task list.
