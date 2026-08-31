@@ -17,6 +17,8 @@ public class Main extends Application {
     private static final String FILE_PATH = "data/longfrog.txt";
     private static final String USER_IMAGE_PATH = "/images/User.png";
     private static final String LONGFROG_IMAGE_PATH = "/images/Longfrog.png";
+    private static final double MINIMUM_WINDOW_WIDTH = 417.0;
+    private static final double MINIMUM_WINDOW_HEIGHT = 220.0;
 
     /**
      * Loads the main FXML view and injects the Longfrog model into its controller.
@@ -38,7 +40,8 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         stage.setTitle("Longfrog");
-        stage.setResizable(false);
+        stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
+        stage.setMinHeight(MINIMUM_WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.show();
     }
