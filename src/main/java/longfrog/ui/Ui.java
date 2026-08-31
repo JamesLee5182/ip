@@ -1,6 +1,8 @@
 package longfrog.ui;
 
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * Handles all console input and output for Longfrog.
@@ -8,12 +10,24 @@ import java.util.Scanner;
 public class Ui {
     private static final String SEPARATOR = "─".repeat(50);
     private final Scanner scanner;
+    private final Consumer<String> messageConsumer;
 
     /**
      * Creates a UI that reads commands from standard input.
      */
     public Ui() {
         scanner = new Scanner(System.in);
+        messageConsumer = System.out::println;
+    }
+
+    /**
+     * Creates a UI that sends messages to the supplied consumer.
+     *
+     * @param messageConsumer the destination for displayed messages
+     */
+    public Ui(Consumer<String> messageConsumer) {
+        scanner = new Scanner(System.in);
+        this.messageConsumer = Objects.requireNonNull(messageConsumer);
     }
 
     /** Returns the next command entered by the user. */
@@ -51,7 +65,7 @@ public class Ui {
 
     /** Displays a message on the console. */
     public void showMessage(String message) {
-        System.out.println(message);
+        messageConsumer.accept(message);
     }
 
     /** Displays the separator used around command responses. */
