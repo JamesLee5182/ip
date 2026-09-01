@@ -4,12 +4,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
 
 <fx:root alignment="TOP_RIGHT"
          maxHeight="1.7976931348623157E308"
          maxWidth="1.7976931348623157E308"
-         prefWidth="400.0"
          styleClass="dialog-box"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/17"
@@ -19,16 +17,17 @@
     </stylesheets>
     <children>
         <Label fx:id="dialog"
+               maxWidth="320.0"
                minHeight="-Infinity"
                text="Label"
                wrapText="true" />
         <ImageView fx:id="displayPicture"
-                   fitHeight="64.0"
-                   fitWidth="64.0"
+                   fitHeight="36.0"
+                   fitWidth="36.0"
                    pickOnBounds="true"
                    preserveRatio="true" />
     </children>
     <padding>
-        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+        <Insets bottom="4.0" left="6.0" right="6.0" top="4.0" />
     </padding>
 </fx:root>

@@ -35,19 +35,6 @@ public class Ui {
         return scanner.nextLine();
     }
 
-    /** Displays the initial greeting. */
-    public void showGreeting() {
-        showMessage(" _                             __                    \n"
-                + "| |       ___   _ __    __ _  / _| _ __   ___    __ _ \n"
-                + "| |      / _ \\ | '_ \\  / _` || |_ | '__| / _ \\  / _` |\n"
-                + "| |___  | (_) || | | || (_| ||  _|| |   | (_) || (_| |\n"
-                + "|_____|  \\___/ |_| |_| \\__, ||_|  |_|    \\___/  \\__, |\n"
-                + "                       |___/                    |___/ \n");
-        showLine();
-        showMessage("I am Longfrog.Longfrog.\nWhat do you want?");
-        showLine();
-    }
-
     /** Displays the farewell message. */
     public void showExitMessage() {
         showMessage("I'm going to sleep. Bye.");

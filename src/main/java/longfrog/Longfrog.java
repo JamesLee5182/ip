@@ -40,8 +40,6 @@ public class Longfrog {
 
     /** Starts the command loop and continues until the user enters {@code bye}. */
     public void run() {
-        ui.showGreeting();
-
         boolean isExit = false;
         while (!isExit) {
             String userInput = ui.readCommand();

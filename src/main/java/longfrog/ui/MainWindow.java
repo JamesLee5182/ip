@@ -1,5 +1,7 @@
 package longfrog.ui;
 
+import java.util.Objects;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -25,6 +27,7 @@ public class MainWindow extends AnchorPane {
     private Longfrog longfrog;
     private Image userImage;
     private Image longfrogImage;
+    private Runnable exitAction;
 
     /**
      * Binds the scroll position to the dialog container's height.
@@ -62,6 +65,15 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
+     * Sets the action used to close the application window.
+     *
+     * @param exitAction the action to run after an exit command
+     */
+    public void setExitAction(Runnable exitAction) {
+        this.exitAction = Objects.requireNonNull(exitAction);
+    }
+
+    /**
      * Adds the user's message and Longfrog's response to the dialog container.
      */
     @FXML
@@ -73,5 +85,9 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getLongfrogDialog(response, longfrogImage));
         userInput.clear();
+
+        if (longfrog.isExitRequested()) {
+            exitAction.run();
+        }
     }
 }
