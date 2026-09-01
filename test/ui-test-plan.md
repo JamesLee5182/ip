@@ -10,21 +10,7 @@ This file is the source of truth for console UI test cases run with the `test-ui
 
 ## Shared console output
 
-Each session starts with this output:
-
-```text
- _                             __                    
-| |       ___   _ __    __ _  / _| _ __   ___    __ _ 
-| |      / _ \ | '_ \  / _` || |_ | '__| / _ \  / _` |
-| |___  | (_) || | | || (_| ||  _|| |   | (_) || (_| |
-|_____|  \___/ |_| |_| \__, ||_|  |_|    \___/  \__, |
-                       |___/                    |___/ 
-
-──────────────────────────────────────────────────
-I am Longfrog.Longfrog.
-What do you want?
-──────────────────────────────────────────────────
-```
+Each session starts without printing a greeting or other startup output.
 
 After every input, the corresponding expected response below is inserted literally into this block. If the response has multiple lines, it replaces `RESPONSE` in full.
 
