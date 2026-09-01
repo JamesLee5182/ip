@@ -21,8 +21,8 @@ class LongfrogTest {
 
         String response = longfrog.getResponse("todo read book");
 
-        assertEquals("Sure dude. I added: [T][ ] read book", response);
-        assertEquals("ok buddy" + System.lineSeparator() + "1: [T][ ] read book",
+        assertEquals("Ribbit! Task compiled into the list: [T][ ] read book", response);
+        assertEquals("Task database snapshot:" + System.lineSeparator() + "1: [T][ ] read book",
                 longfrog.getResponse("list"));
         assertFalse(longfrog.isExitRequested());
     }
@@ -31,16 +31,17 @@ class LongfrogTest {
     void getResponse_invalidCommand_returnsParserErrorWithoutAddingTask() {
         Longfrog longfrog = createLongfrog();
 
-        assertEquals("Bruh, I don't know that command.", longfrog.getResponse("dance"));
-        assertEquals("ok buddy" + System.lineSeparator()
-                + "you didn't anything yet. What do you want from me?", longfrog.getResponse("list"));
+        assertEquals("Unknown command token. My parser cannot compute that, ribbit.",
+                longfrog.getResponse("dance"));
+        assertEquals("Task database snapshot:" + System.lineSeparator()
+                + "No tasks detected; the queue is an empty set. Ribbit.", longfrog.getResponse("list"));
     }
 
     @Test
     void getResponse_byeCommand_returnsFarewellAndRequestsExit() {
         Longfrog longfrog = createLongfrog();
 
-        assertEquals("I'm going to sleep. Bye.", longfrog.getResponse("bye"));
+        assertEquals("Ribbit and good night! Shutting down the lily-pad terminal.", longfrog.getResponse("bye"));
         assertTrue(longfrog.isExitRequested());
     }
 

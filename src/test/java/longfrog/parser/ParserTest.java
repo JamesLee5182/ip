@@ -53,51 +53,51 @@ class ParserTest {
 
     @Test
     void parse_blankInput_throwsExceptionWithHelpfulMessage() {
-        assertParseError("   ", "Bruh, can you enter a command?");
+        assertParseError("   ", "Input buffer is empty. Please enter a command, ribbit.");
     }
 
     @Test
     void parse_unknownCommand_throwsExceptionWithHelpfulMessage() {
-        assertParseError("dance", "Bruh, I don't know that command.");
+        assertParseError("dance", "Unknown command token. My parser cannot compute that, ribbit.");
     }
 
     @Test
     void parse_todoWithoutTask_throwsExceptionWithUsage() {
-        assertParseError("todo", "Dude, use: todo TASK");
+        assertParseError("todo", "Syntax error. Expected: todo TASK");
     }
 
     @Test
     void parse_deadlineWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
-        assertParseError("deadline submit report", "Dude, use: deadline TASK /by d/M/yyyy HHmm");
+        assertParseError("deadline submit report", "Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
         assertParseError("deadline submit report /by tomorrow",
-                "Dude, invalid date format! Use: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
+                "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
     }
 
     @Test
     void parse_eventWithMissingOrInvalidTimes_throwsExceptionWithHelpfulMessage() {
         assertParseError("event meeting /from 2/12/2019 1400",
-                "Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
+                "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
         assertParseError("event meeting /from tomorrow /to 2/12/2019 1600",
-                "Dude, invalid date format! Use: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
+                "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
     }
 
     @Test
     void parse_dateWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
-        assertParseError("date", "Dude, use: date d/M/yyyy (e.g., date 2/12/2019)");
-        assertParseError("date tomorrow", "Dude, invalid date format! Use: d/M/yyyy (e.g., 2/12/2019)");
+        assertParseError("date", "Syntax error. Expected: date d/M/yyyy (e.g., date 2/12/2019)");
+        assertParseError("date tomorrow", "Temporal parsing failed. Expected: d/M/yyyy (e.g., 2/12/2019)");
     }
 
     @Test
     void parse_findWithoutKeyword_throwsExceptionWithUsage() {
-        assertParseError("find", "Dude, use: find KEYWORD");
+        assertParseError("find", "Syntax error. Expected: find KEYWORD");
     }
 
     @Test
     void parse_taskCommandsWithInvalidIndex_throwsExceptionWithHelpfulMessage() {
-        assertParseError("mark", "Dude can you specify a task number like: mark 1");
-        assertParseError("unmark 0", "Dude, task numbers start at 1.");
-        assertParseError("delete -1", "Dude, task numbers start at 1.");
-        assertParseError("mark first", "Dude, the task number must be a valid integer!");
+        assertParseError("mark", "Index argument missing. Try: mark 1");
+        assertParseError("unmark 0", "Index underflow: task numbers start at 1.");
+        assertParseError("delete -1", "Index underflow: task numbers start at 1.");
+        assertParseError("mark first", "Type mismatch: task number must be an integer.");
     }
 
     private void assertParseError(String input, String expectedMessage) {

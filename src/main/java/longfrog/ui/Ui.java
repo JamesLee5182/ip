@@ -37,17 +37,17 @@ public class Ui {
 
     /** Displays the farewell message. */
     public void showExitMessage() {
-        showMessage("I'm going to sleep. Bye.");
+        showMessage("Ribbit and good night! Shutting down the lily-pad terminal.");
     }
 
     /** Displays a message when saved tasks cannot be loaded. */
     public void showLoadingError() {
-        showMessage("Warning: Unable to load save file. Starting with an empty list.");
+        showMessage("Warning: Save-file decoding failed. Booting with an empty task set.");
     }
 
     /** Displays a message when tasks cannot be saved. */
     public void showSavingError() {
-        showMessage("Error: Failed to save tasks to file.");
+        showMessage("I/O error: Task data could not be persisted to the pond archive.");
     }
 
     /** Displays a message on the console. */

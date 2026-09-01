@@ -23,7 +23,7 @@ public class AddCommand implements Command {
     @Override
     public boolean execute(Ui ui) {
         taskList.addToList(task);
-        ui.showMessage("Sure dude. I added: " + task);
+        ui.showMessage("Ribbit! Task compiled into the list: " + task);
         return false;
     }
 }

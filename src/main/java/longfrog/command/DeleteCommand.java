@@ -29,9 +29,9 @@ public class DeleteCommand implements Command {
     public boolean execute(Ui ui) {
         Task deletedTask = taskList.removeTask(index);
         if (deletedTask == null) {
-            ui.showMessage("I can't do that. The task doesn't exist");
+            ui.showMessage("Index error: no task exists at that position. Ribbit.");
         } else {
-            ui.showMessage("Sure dude. I deleted: " + deletedTask.getName());
+            ui.showMessage("Garbage collection complete; removed: " + deletedTask.getName());
         }
 
         return false;

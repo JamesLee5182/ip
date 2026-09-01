@@ -15,10 +15,10 @@ public class MarkCommand implements Command {
     @Override
     public boolean execute(Ui ui) {
         if (task == null) {
-            ui.showMessage("I can't do that. The task doesn't exist");
+            ui.showMessage("Index error: no task exists at that position. Ribbit.");
         } else {
             task.markAsDone();
-            ui.showMessage("I marked the task: " + task.getName());
+            ui.showMessage("Boolean state flipped to DONE: " + task.getName());
         }
 
         return false;

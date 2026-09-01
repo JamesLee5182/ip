@@ -15,10 +15,10 @@ public class UnmarkCommand implements Command {
     @Override
     public boolean execute(Ui ui) {
         if (task == null) {
-            ui.showMessage("I can't do that. The task doesn't exist");
+            ui.showMessage("Index error: no task exists at that position. Ribbit.");
         } else {
             task.unmarkAsDone();
-            ui.showMessage("I unmarked the task: " + task.getName());
+            ui.showMessage("Boolean state reset to NOT DONE: " + task.getName());
         }
 
         return false;

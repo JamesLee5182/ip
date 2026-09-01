@@ -32,8 +32,8 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `list` | `ok buddy`<br>`you didn't anything yet. What do you want from me?` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `list` | `Task database snapshot:`<br>`No tasks detected; the queue is an empty set. Ribbit.` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-002: Add every supported task type and list them
 
@@ -41,11 +41,11 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Sure dude. I added: [T][ ] read book` |
-  | `deadline return book /by 2/12/2019 1800` | `Sure dude. I added: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `event team meeting /from 2/12/2019 1400 /to 2/12/2019 1600` | `Sure dude. I added: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `list` | `ok buddy`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)`<br>`3: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
+  | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `event team meeting /from 2/12/2019 1400 /to 2/12/2019 1600` | `Ribbit! Task compiled into the list: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)`<br>`3: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-003: Mark and unmark an existing task
 
@@ -53,12 +53,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo submit assignment` | `Sure dude. I added: [T][ ] submit assignment` |
-  | `mark 1` | `I marked the task: submit assignment` |
-  | `list` | `ok buddy`<br>`1: [T][X] submit assignment` |
-  | `unmark 1` | `I unmarked the task: submit assignment` |
-  | `list` | `ok buddy`<br>`1: [T][ ] submit assignment` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo submit assignment` | `Ribbit! Task compiled into the list: [T][ ] submit assignment` |
+  | `mark 1` | `Boolean state flipped to DONE: submit assignment` |
+  | `list` | `Task database snapshot:`<br>`1: [T][X] submit assignment` |
+  | `unmark 1` | `Boolean state reset to NOT DONE: submit assignment` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] submit assignment` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-004: Reject missing task numbers without changing the list
 
@@ -66,13 +66,13 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Sure dude. I added: [T][ ] read book` |
-  | `mark 2` | `I can't do that. The task doesn't exist` |
-  | `list` | `ok buddy`<br>`1: [T][ ] read book` |
-  | `mark 1` | `I marked the task: read book` |
-  | `unmark 0` | `Dude, task numbers start at 1.` |
-  | `list` | `ok buddy`<br>`1: [T][X] read book` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
+  | `mark 2` | `Index error: no task exists at that position. Ribbit.` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] read book` |
+  | `mark 1` | `Boolean state flipped to DONE: read book` |
+  | `unmark 0` | `Index underflow: task numbers start at 1.` |
+  | `list` | `Task database snapshot:`<br>`1: [T][X] read book` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-005: Reject empty and unknown commands without ending the session
 
@@ -80,12 +80,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Sure dude. I added: [T][ ] read book` |
-  | `todo` | `Dude, use: todo TASK` |
-  | _empty line_ | `Bruh, can you enter a command?` |
-  | `dance` | `Bruh, I don't know that command.` |
-  | `list` | `ok buddy`<br>`1: [T][ ] read book` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
+  | `todo` | `Syntax error. Expected: todo TASK` |
+  | _empty line_ | `Input buffer is empty. Please enter a command, ribbit.` |
+  | `dance` | `Unknown command token. My parser cannot compute that, ribbit.` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] read book` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-006: Reject incomplete deadline and event inputs without adding tasks
 
@@ -93,12 +93,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `deadline submit report /by 2/12/2019 1800` | `Sure dude. I added: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)` |
-  | `deadline missing date` | `Dude, use: deadline TASK /by d/M/yyyy HHmm` |
-  | `event tutorial /from 2/12/2019 1400 /to 2/12/2019 1600` | `Sure dude. I added: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `event missing end /from 2/12/2019 1400` | `Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm` |
-  | `list` | `ok buddy`<br>`1: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`2: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `deadline submit report /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)` |
+  | `deadline missing date` | `Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm` |
+  | `event tutorial /from 2/12/2019 1400 /to 2/12/2019 1600` | `Ribbit! Task compiled into the list: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `event missing end /from 2/12/2019 1400` | `Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm` |
+  | `list` | `Task database snapshot:`<br>`1: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`2: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-007: Reject malformed task-number inputs without changing completion state
 
@@ -106,12 +106,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo revise notes` | `Sure dude. I added: [T][ ] revise notes` |
-  | `mark first` | `Dude, the task number must be a valid integer!` |
-  | `list` | `ok buddy`<br>`1: [T][ ] revise notes` |
-  | `unmark` | `Dude can you specify a task number like: unmark 1` |
-  | `list` | `ok buddy`<br>`1: [T][ ] revise notes` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo revise notes` | `Ribbit! Task compiled into the list: [T][ ] revise notes` |
+  | `mark first` | `Type mismatch: task number must be an integer.` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] revise notes` |
+  | `unmark` | `Index argument missing. Try: unmark 1` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] revise notes` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-008: Accept command keywords regardless of letter case
 
@@ -119,9 +119,9 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `TODO Read Book` | `Sure dude. I added: [T][ ] Read Book` |
-  | `LIST` | `ok buddy`<br>`1: [T][ ] Read Book` |
-  | `BYE` | `I'm going to sleep. Bye.` |
+  | `TODO Read Book` | `Ribbit! Task compiled into the list: [T][ ] Read Book` |
+  | `LIST` | `Task database snapshot:`<br>`1: [T][ ] Read Book` |
+  | `BYE` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-009: Delete a task and preserve the remaining task order
 
@@ -129,16 +129,16 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo first task` | `Sure dude. I added: [T][ ] first task` |
-  | `todo second task` | `Sure dude. I added: [T][ ] second task` |
-  | `todo third task` | `Sure dude. I added: [T][ ] third task` |
-  | `delete 4` | `I can't do that. The task doesn't exist` |
-  | `list` | `ok buddy`<br>`1: [T][ ] first task`<br>`2: [T][ ] second task`<br>`3: [T][ ] third task` |
-  | `delete 2` | `Sure dude. I deleted: second task` |
-  | `list` | `ok buddy`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
-  | `delete` | `Dude can you specify a task number like: delete 1` |
-  | `list` | `ok buddy`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo first task` | `Ribbit! Task compiled into the list: [T][ ] first task` |
+  | `todo second task` | `Ribbit! Task compiled into the list: [T][ ] second task` |
+  | `todo third task` | `Ribbit! Task compiled into the list: [T][ ] third task` |
+  | `delete 4` | `Index error: no task exists at that position. Ribbit.` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] first task`<br>`2: [T][ ] second task`<br>`3: [T][ ] third task` |
+  | `delete 2` | `Garbage collection complete; removed: second task` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
+  | `delete` | `Index argument missing. Try: delete 1` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-010: Find tasks by a case-insensitive description keyword
 
@@ -146,11 +146,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Sure dude. I added: [T][ ] read book` |
-  | `todo go running` | `Sure dude. I added: [T][ ] go running` |
-  | `deadline return book /by 2/12/2019 1800` | `Sure dude. I added: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `find BOOK` | `Here are the matching tasks in your list:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
+  | `todo go running` | `Ribbit! Task compiled into the list: [T][ ] go running` |
+  | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `find BOOK` | `Search algorithm complete. Matching specimens:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `find holiday` | `Search returned zero matches. The pond is quiet.` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
 
 ### TC-011: Use the clearer date command
 
@@ -158,6 +159,7 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `deadline return book /by 2/12/2019 1800` | `Sure dude. I added: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `date 2/12/2019` | `Here are the tasks happening on 2/12/2019:`<br>`1: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `bye` | `I'm going to sleep. Bye.` |
+  | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `date 2/12/2019` | `Temporal query complete for 2/12/2019:`<br>`1: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `date 3/12/2019` | `Temporal query returned zero tasks for 3/12/2019.` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |

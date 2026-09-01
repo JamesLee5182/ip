@@ -56,9 +56,9 @@ public class DateCommand implements Command {
 
         String formattedDate = targetDate.format(FormatUtils.DATE_ONLY_FORMAT);
         if (matchingTasks.isEmpty()) {
-            ui.showMessage("No deadlines or events found on " + formattedDate + ".");
+            ui.showMessage("Temporal query returned zero tasks for " + formattedDate + ".");
         } else {
-            ui.showMessage("Here are the tasks happening on " + formattedDate + ":");
+            ui.showMessage("Temporal query complete for " + formattedDate + ":");
             for (int i = 0; i < matchingTasks.size(); i++) {
                 ui.showMessage((i + 1) + ": " + matchingTasks.get(i));
             }

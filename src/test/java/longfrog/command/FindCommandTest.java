@@ -36,7 +36,7 @@ class FindCommandTest {
         }
 
         String expectedOutput = String.join(System.lineSeparator(),
-                "Here are the matching tasks in your list:",
+                "Search algorithm complete. Matching specimens:",
                 "1: [T][X] read book",
                 "2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)",
                 "");
@@ -58,7 +58,7 @@ class FindCommandTest {
             System.setOut(originalOutput);
         }
 
-        assertEquals("No matching tasks found." + System.lineSeparator(),
+        assertEquals("Search returned zero matches. The pond is quiet." + System.lineSeparator(),
                 output.toString(StandardCharsets.UTF_8));
     }
 }

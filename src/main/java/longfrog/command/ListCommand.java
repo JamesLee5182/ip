@@ -14,11 +14,11 @@ public class ListCommand implements Command {
     /** Displays the task list or its empty-list message. */
     @Override
     public boolean execute(Ui ui) {
-        ui.showMessage("ok buddy");
+        ui.showMessage("Task database snapshot:");
 
         int count = taskList.getCount();
         if (count == 0) {
-            ui.showMessage("you didn't anything yet. What do you want from me?");
+            ui.showMessage("No tasks detected; the queue is an empty set. Ribbit.");
         } else {
             for (int i = 0; i < count; i++) {
                 Task task = taskList.getTask(i);

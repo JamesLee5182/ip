@@ -39,12 +39,13 @@ public class Parser {
     public Command parse(String fullInput) throws LongfrogException {
         String cleanInput = fullInput.trim();
         if (cleanInput.isEmpty()) {
-            throw new LongfrogException("Bruh, can you enter a command?");
+            throw new LongfrogException("Input buffer is empty. Please enter a command, ribbit.");
         }
 
         String[] words = cleanInput.split(" ", 2);
         CommandType commandType = CommandType.fromKeyword(words[0])
-                .orElseThrow(() -> new LongfrogException("Bruh, I don't know that command."));
+                .orElseThrow(() -> new LongfrogException(
+                        "Unknown command token. My parser cannot compute that, ribbit."));
 
         switch (commandType) {
             case BYE:
@@ -58,7 +59,7 @@ public class Parser {
                 String[] deadlineParts = getArgument(words, "deadline TASK /by d/M/yyyy HHmm")
                         .split(" /by ", 2);
                 if (deadlineParts.length < 2 || deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
-                    throw new LongfrogException("Dude, use: deadline TASK /by d/M/yyyy HHmm");
+                    throw new LongfrogException("Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
                 }
                 String deadlineName = deadlineParts[0].trim();
                 LocalDateTime by = parseDateTime(deadlineParts[1].trim());
@@ -70,13 +71,15 @@ public class Parser {
                         "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm")
                         .split(" /from ", 2);
                 if (eventParts.length < 2 || eventParts[0].isBlank() || eventParts[1].isBlank()) {
-                    throw new LongfrogException("Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
+                    throw new LongfrogException(
+                            "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }
                 String eventName = eventParts[0].trim();
 
                 String[] timeParts = eventParts[1].split(" /to ", 2);
                 if (timeParts.length < 2 || timeParts[0].isBlank() || timeParts[1].isBlank()) {
-                    throw new LongfrogException("Dude, use: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
+                    throw new LongfrogException(
+                            "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }
                 LocalDateTime from = parseDateTime(timeParts[0].trim());
                 LocalDateTime to = parseDateTime(timeParts[1].trim());
@@ -106,7 +109,7 @@ public class Parser {
                 return new FindCommand(this.taskList, keyword);
 
             default:
-                throw new LongfrogException("Dude, I don't know that command.");
+                throw new LongfrogException("Unknown command token. My parser cannot compute that, ribbit.");
         }
     }
 
@@ -120,7 +123,7 @@ public class Parser {
      */
     private String getArgument(String[] words, String usage) throws LongfrogException {
         if (words.length < 2 || words[1].isBlank()) {
-            throw new LongfrogException("Dude, use: " + usage);
+            throw new LongfrogException("Syntax error. Expected: " + usage);
         }
         return words[1].trim();
     }
@@ -136,7 +139,8 @@ public class Parser {
         try {
             return LocalDateTime.parse(dateTimeString, FormatUtils.INPUT_SAVE_FORMAT);
         } catch (DateTimeParseException e) {
-            throw new LongfrogException("Dude, invalid date format! Use: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
+            throw new LongfrogException(
+                    "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
         }
     }
 
@@ -151,7 +155,7 @@ public class Parser {
         try {
             return LocalDate.parse(dateString, FormatUtils.DATE_ONLY_FORMAT);
         } catch (DateTimeParseException e) {
-            throw new LongfrogException("Dude, invalid date format! Use: d/M/yyyy (e.g., 2/12/2019)");
+            throw new LongfrogException("Temporal parsing failed. Expected: d/M/yyyy (e.g., 2/12/2019)");
         }
     }
 
@@ -176,17 +180,17 @@ public class Parser {
     private int parseIndex(String[] words) throws LongfrogException {
         // Verify that the user supplied an argument.
         if (words.length < 2 || words[1].trim().isEmpty()) {
-            throw new LongfrogException("Dude can you specify a task number like: " + words[0] + " 1");
+            throw new LongfrogException("Index argument missing. Try: " + words[0] + " 1");
         }
 
         try {
             int userIndex = Integer.parseInt(words[1].trim());
             if (userIndex <= 0) {
-                throw new LongfrogException("Dude, task numbers start at 1.");
+                throw new LongfrogException("Index underflow: task numbers start at 1.");
             }
             return userIndex - 1;
         } catch (NumberFormatException e) {
-            throw new LongfrogException("Dude, the task number must be a valid integer!");
+            throw new LongfrogException("Type mismatch: task number must be an integer.");
         }
     }
 }
