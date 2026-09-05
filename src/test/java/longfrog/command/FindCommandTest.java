@@ -20,9 +20,9 @@ class FindCommandTest {
         TaskList taskList = new TaskList();
         Todo firstTask = new Todo("read book");
         Deadline secondTask = new Deadline("return book", java.time.LocalDateTime.of(2019, 12, 2, 18, 0));
-        taskList.addToList(firstTask);
-        taskList.addToList(new Todo("go running"));
-        taskList.addToList(secondTask);
+        taskList.addTask(firstTask);
+        taskList.addTask(new Todo("go running"));
+        taskList.addTask(secondTask);
         firstTask.markAsDone();
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -47,7 +47,7 @@ class FindCommandTest {
     @Test
     void execute_keywordMatchesNoDescriptions_displaysNoMatchMessage() {
         TaskList taskList = new TaskList();
-        taskList.addToList(new Todo("read book"));
+        taskList.addTask(new Todo("read book"));
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream originalOutput = System.out;

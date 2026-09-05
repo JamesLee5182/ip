@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -16,19 +17,39 @@ class TaskListTest {
         TaskList taskList = new TaskList(null);
 
         assertEquals(0, taskList.getCount());
-        assertTrue(taskList.getAll().isEmpty());
+        assertTrue(taskList.getTasks().isEmpty());
     }
 
     @Test
-    void addToList_addsTaskAndMakesItRetrievable() {
+    void constructor_loadedTasksListIsModified_doesNotChangeTaskList() {
+        ArrayList<Task> loadedTasks = new ArrayList<>();
+        loadedTasks.add(new Todo("read book"));
+        TaskList taskList = new TaskList(loadedTasks);
+
+        loadedTasks.clear();
+
+        assertEquals(1, taskList.getCount());
+    }
+
+    @Test
+    void addTask_addsTaskAndMakesItRetrievable() {
         TaskList taskList = new TaskList();
         Todo todo = new Todo("read book");
 
-        taskList.addToList(todo);
+        taskList.addTask(todo);
 
         assertEquals(1, taskList.getCount());
         assertSame(todo, taskList.getTask(0));
-        assertEquals(1, taskList.getAll().size());
+        assertEquals(1, taskList.getTasks().size());
+    }
+
+    @Test
+    void getTasks_attemptToModifyReturnedList_throwsException() {
+        TaskList taskList = new TaskList();
+        taskList.addTask(new Todo("read book"));
+
+        assertThrows(UnsupportedOperationException.class, () -> taskList.getTasks().add(new Todo("write notes")));
+        assertEquals(1, taskList.getCount());
     }
 
     @Test
@@ -36,8 +57,8 @@ class TaskListTest {
         TaskList taskList = new TaskList(new ArrayList<>());
         Todo first = new Todo("first");
         Todo second = new Todo("second");
-        taskList.addToList(first);
-        taskList.addToList(second);
+        taskList.addTask(first);
+        taskList.addTask(second);
 
         assertFalse(taskList.taskExists(-1));
         assertTrue(taskList.taskExists(0));
@@ -55,9 +76,9 @@ class TaskListTest {
         Todo first = new Todo("first");
         Todo middle = new Todo("middle");
         Todo last = new Todo("last");
-        taskList.addToList(first);
-        taskList.addToList(middle);
-        taskList.addToList(last);
+        taskList.addTask(first);
+        taskList.addTask(middle);
+        taskList.addTask(last);
 
         Task removedTask = taskList.removeTask(1);
 
@@ -71,7 +92,7 @@ class TaskListTest {
     void removeTask_invalidIndex_returnsNullWithoutChangingList() {
         TaskList taskList = new TaskList();
         Todo todo = new Todo("read book");
-        taskList.addToList(todo);
+        taskList.addTask(todo);
 
         assertNull(taskList.removeTask(-1));
         assertNull(taskList.removeTask(1));

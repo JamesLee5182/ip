@@ -10,29 +10,29 @@ import java.util.List;
  * tasks without manually managing array capacity or indices.</p>
  */
 public class TaskList {
-    private final List<Task> list;
+    private final List<Task> tasks;
 
     /**
      * Creates an empty task list.
      */
     public TaskList() {
-        this.list = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
     /**
      * Creates a task list with the specified list of tasks
      */
     public TaskList(List<Task> loadedTasks) {
-        this.list = loadedTasks != null ? loadedTasks : new ArrayList<>();
+        tasks = loadedTasks == null ? new ArrayList<>() : new ArrayList<>(loadedTasks);
     }
 
     /**
      * Returns the tasks in their display order.
      *
-     * @return the mutable task list used by the application
+     * @return an unmodifiable snapshot of the tasks
      */
-    public List<Task> getAll() {
-        return list;
+    public List<Task> getTasks() {
+        return List.copyOf(tasks);
     }
 
     /**
@@ -41,7 +41,7 @@ public class TaskList {
      * @return the number of tasks
      */
     public int getCount() {
-        return list.size();
+        return tasks.size();
     }
 
     /**
@@ -49,8 +49,8 @@ public class TaskList {
      *
      * @param task the task to add
      */
-    public void addToList(Task task) {
-        list.add(task);
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     /**
@@ -64,7 +64,7 @@ public class TaskList {
             return null;
         }
 
-        return list.remove(index);
+        return tasks.remove(index);
     }
 
     /**
@@ -74,7 +74,7 @@ public class TaskList {
      * @return whether the index is within the list bounds
      */
     public boolean taskExists(int index) {
-        return index >= 0 && index < list.size();
+        return index >= 0 && index < tasks.size();
     }
 
     /**
@@ -88,6 +88,6 @@ public class TaskList {
             return null;
         }
 
-        return list.get(index);
+        return tasks.get(index);
     }
 }

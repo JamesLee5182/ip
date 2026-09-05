@@ -87,7 +87,7 @@ public class Longfrog {
         try {
             Command command = parser.parse(input);
             boolean isExit = command.execute(outputUi);
-            if (!storage.save(taskList.getAll())) {
+            if (!storage.save(taskList.getTasks())) {
                 outputUi.showSavingError();
             }
             return isExit;
