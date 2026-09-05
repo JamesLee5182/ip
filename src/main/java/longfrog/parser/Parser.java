@@ -24,6 +24,12 @@ import longfrog.util.FormatUtils;
  * Handles the parsing of raw user text inputs into executable {@link Command} objects.
  */
 public class Parser {
+    private static final String TODO_USAGE = "todo TASK";
+    private static final String DEADLINE_USAGE = "deadline TASK /by d/M/yyyy HHmm";
+    private static final String EVENT_USAGE = "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm";
+    private static final String DATE_USAGE = "date d/M/yyyy (e.g., date 2/12/2019)";
+    private static final String FIND_USAGE = "find KEYWORD";
+
     private final TaskList taskList;
 
     public Parser(TaskList taskList) {
@@ -50,67 +56,91 @@ public class Parser {
         switch (commandType) {
             case BYE:
                 return new ExitCommand();
-
             case TODO:
-                String todoName = getArgument(words, "todo TASK");
-                return new AddCommand(this.taskList, new Todo(todoName));
-
+                return parseTodoCommand(words);
             case DEADLINE:
-                String[] deadlineParts = getArgument(words, "deadline TASK /by d/M/yyyy HHmm")
-                        .split(" /by ", 2);
-                if (deadlineParts.length < 2 || deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
-                    throw new LongfrogException("Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
-                }
-                String deadlineName = deadlineParts[0].trim();
-                LocalDateTime by = parseDateTime(deadlineParts[1].trim());
-
-                return new AddCommand(this.taskList, new Deadline(deadlineName, by));
-
+                return parseDeadlineCommand(words);
             case EVENT:
-                String[] eventParts = getArgument(words,
-                        "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm")
-                        .split(" /from ", 2);
-                if (eventParts.length < 2 || eventParts[0].isBlank() || eventParts[1].isBlank()) {
-                    throw new LongfrogException(
-                            "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
-                }
-                String eventName = eventParts[0].trim();
-
-                String[] timeParts = eventParts[1].split(" /to ", 2);
-                if (timeParts.length < 2 || timeParts[0].isBlank() || timeParts[1].isBlank()) {
-                    throw new LongfrogException(
-                            "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
-                }
-                LocalDateTime from = parseDateTime(timeParts[0].trim());
-                LocalDateTime to = parseDateTime(timeParts[1].trim());
-
-                return new AddCommand(this.taskList, new Event(eventName, from, to));
-
+                return parseEventCommand(words);
             case LIST:
                 return new ListCommand(this.taskList);
-
             case MARK:
-                int markIndex = parseIndex(words);
-                return new MarkCommand(this.taskList, markIndex);
-
+                return new MarkCommand(this.taskList, parseIndex(words));
             case UNMARK:
-                int unmarkIndex = parseIndex(words);
-                return new UnmarkCommand(this.taskList, unmarkIndex);
-
+                return new UnmarkCommand(this.taskList, parseIndex(words));
             case DELETE:
-                int deleteIndex = parseIndex(words);
-                return new DeleteCommand(this.taskList, deleteIndex);
-
+                return new DeleteCommand(this.taskList, parseIndex(words));
             case DATE:
                 return parseDateCommand(words);
-
             case FIND:
-                String keyword = getArgument(words, "find KEYWORD");
-                return new FindCommand(this.taskList, keyword);
-
+                return parseFindCommand(words);
             default:
                 throw new LongfrogException("Unknown command token. My parser cannot compute that, ribbit.");
         }
+    }
+
+    /**
+     * Parses a todo command.
+     *
+     * @param words the command keyword and task description
+     * @return a command that adds the todo
+     * @throws LongfrogException if the task description is missing
+     */
+    private Command parseTodoCommand(String[] words) throws LongfrogException {
+        String taskName = getArgument(words, TODO_USAGE);
+        return new AddCommand(taskList, new Todo(taskName));
+    }
+
+    /**
+     * Parses a deadline command.
+     *
+     * @param words the command keyword and deadline details
+     * @return a command that adds the deadline
+     * @throws LongfrogException if the task description or deadline is missing or invalid
+     */
+    private Command parseDeadlineCommand(String[] words) throws LongfrogException {
+        String argument = getArgument(words, DEADLINE_USAGE);
+        String[] deadlineParts = splitArgument(argument, " /by ", DEADLINE_USAGE);
+        String taskName = deadlineParts[0].trim();
+        LocalDateTime deadline = parseDateTime(deadlineParts[1].trim());
+
+        return new AddCommand(taskList, new Deadline(taskName, deadline));
+    }
+
+    /**
+     * Parses an event command.
+     *
+     * @param words the command keyword and event details
+     * @return a command that adds the event
+     * @throws LongfrogException if the task description or event times are missing or invalid
+     */
+    private Command parseEventCommand(String[] words) throws LongfrogException {
+        String argument = getArgument(words, EVENT_USAGE);
+        String[] eventParts = splitArgument(argument, " /from ", EVENT_USAGE);
+        String[] timeParts = splitArgument(eventParts[1], " /to ", EVENT_USAGE);
+
+        String taskName = eventParts[0].trim();
+        LocalDateTime start = parseDateTime(timeParts[0].trim());
+        LocalDateTime end = parseDateTime(timeParts[1].trim());
+
+        return new AddCommand(taskList, new Event(taskName, start, end));
+    }
+
+    /**
+     * Splits an argument around a required delimiter and validates both resulting parts.
+     *
+     * @param argument the argument to split
+     * @param delimiter the syntax delimiter separating the two parts
+     * @param usage the required command format
+     * @return the two non-blank argument parts
+     * @throws LongfrogException if the delimiter or either argument part is missing
+     */
+    private String[] splitArgument(String argument, String delimiter, String usage) throws LongfrogException {
+        String[] parts = argument.split(delimiter, 2);
+        if (parts.length < 2 || parts[0].isBlank() || parts[1].isBlank()) {
+            throw new LongfrogException("Syntax error. Expected: " + usage);
+        }
+        return parts;
     }
 
     /**
@@ -167,9 +197,21 @@ public class Parser {
      * @throws LongfrogException if the date argument is missing or invalid
      */
     private Command parseDateCommand(String[] words) throws LongfrogException {
-        String dateString = getArgument(words, "date d/M/yyyy (e.g., date 2/12/2019)");
+        String dateString = getArgument(words, DATE_USAGE);
         LocalDate targetDate = parseDate(dateString);
-        return new DateCommand(this.taskList, targetDate);
+        return new DateCommand(taskList, targetDate);
+    }
+
+    /**
+     * Parses a find command.
+     *
+     * @param words the command keyword and search term
+     * @return a command that searches task descriptions
+     * @throws LongfrogException if the search term is missing
+     */
+    private Command parseFindCommand(String[] words) throws LongfrogException {
+        String keyword = getArgument(words, FIND_USAGE);
+        return new FindCommand(taskList, keyword);
     }
 
     /**
@@ -178,7 +220,6 @@ public class Parser {
      * @return The 0-based task index.
      */
     private int parseIndex(String[] words) throws LongfrogException {
-        // Verify that the user supplied an argument.
         if (words.length < 2 || words[1].trim().isEmpty()) {
             throw new LongfrogException("Index argument missing. Try: " + words[0] + " 1");
         }
