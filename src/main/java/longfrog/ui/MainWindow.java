@@ -78,6 +78,10 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        assert longfrog != null : "Longfrog model must be injected before handling input";
+        assert userImage != null : "User image must be injected before handling input";
+        assert longfrogImage != null : "Longfrog image must be injected before handling input";
+
         String input = userInput.getText();
         String response = longfrog.getResponse(input);
 
@@ -87,6 +91,7 @@ public class MainWindow extends AnchorPane {
         userInput.clear();
 
         if (longfrog.isExitRequested()) {
+            assert exitAction != null : "Exit action must be injected before handling an exit command";
             exitAction.run();
         }
     }
