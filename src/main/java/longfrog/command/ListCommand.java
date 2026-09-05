@@ -1,11 +1,14 @@
 package longfrog.command;
+
+import java.util.List;
+
 import longfrog.task.Task;
 import longfrog.task.TaskList;
 import longfrog.ui.Ui;
 
 /** Displays every task currently in the task list. */
 public class ListCommand implements Command {
-    private TaskList taskList;
+    private final TaskList taskList;
 
     public ListCommand(TaskList taskList) {
         this.taskList = taskList;
@@ -16,18 +19,11 @@ public class ListCommand implements Command {
     public boolean execute(Ui ui) {
         ui.showMessage("Task database snapshot:");
 
-        int count = taskList.getCount();
-        if (count == 0) {
+        List<Task> tasks = taskList.getTasks();
+        if (tasks.isEmpty()) {
             ui.showMessage("No tasks detected; the queue is an empty set. Ribbit.");
         } else {
-            for (int i = 0; i < count; i++) {
-                Task task = taskList.getTask(i);
-                if (task == null) {
-                    break;
-                }
-
-                ui.showMessage((i + 1) + ": " + task);
-            }
+            ui.showNumberedTasks(tasks);
         }
 
         return false;

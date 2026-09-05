@@ -46,9 +46,7 @@ public class DateCommand implements Command {
             ui.showMessage("Temporal query returned zero tasks for " + formattedDate + ".");
         } else {
             ui.showMessage("Temporal query complete for " + formattedDate + ":");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                ui.showMessage((i + 1) + ": " + matchingTasks.get(i));
-            }
+            ui.showNumberedTasks(matchingTasks);
         }
 
         return false;

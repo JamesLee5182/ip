@@ -39,9 +39,7 @@ public class FindCommand implements Command {
             ui.showMessage("Search returned zero matches. The pond is quiet.");
         } else {
             ui.showMessage("Search algorithm complete. Matching specimens:");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                ui.showMessage((i + 1) + ": " + matchingTasks.get(i));
-            }
+            ui.showNumberedTasks(matchingTasks);
         }
 
         return false;
