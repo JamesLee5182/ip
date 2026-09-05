@@ -1,7 +1,10 @@
 package longfrog.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,22 @@ class TaskTest {
         assertEquals(" ", todo.getStatusIcon());
         assertEquals("[T][ ] read book", todo.toString());
         assertEquals("T | 0 | read book", todo.toFileFormat());
+    }
+
+    @Test
+    void occursOn_tasksWithDifferentDateSemantics_returnsExpectedResults() {
+        LocalDate targetDate = LocalDate.of(2024, 1, 2);
+        Todo todo = new Todo("read book");
+        Deadline deadline = new Deadline("submit report", targetDate.atTime(9, 0));
+        Event event = new Event("camp", targetDate.minusDays(1).atStartOfDay(),
+                targetDate.plusDays(1).atStartOfDay());
+
+        assertFalse(todo.occursOn(targetDate));
+        assertTrue(deadline.occursOn(targetDate));
+        assertTrue(event.occursOn(targetDate));
+        assertTrue(event.occursOn(targetDate.minusDays(1)));
+        assertTrue(event.occursOn(targetDate.plusDays(1)));
+        assertFalse(event.occursOn(targetDate.plusDays(2)));
     }
 
     @Test

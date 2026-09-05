@@ -1,5 +1,6 @@
 package longfrog.task;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import longfrog.util.FormatUtils;
@@ -38,6 +39,22 @@ public class Event extends Task {
      */
     public LocalDateTime getTo() {
         return this.to;
+    }
+
+    /**
+     * Checks whether this event's date range includes a date.
+     *
+     * @param date the date to check
+     * @return whether the event occurs on the date
+     */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        LocalDate startDate = from.toLocalDate();
+        LocalDate endDate = to.toLocalDate();
+        boolean isOnOrAfterStart = !date.isBefore(startDate);
+        boolean isOnOrBeforeEnd = !date.isAfter(endDate);
+
+        return isOnOrAfterStart && isOnOrBeforeEnd;
     }
 
     /**

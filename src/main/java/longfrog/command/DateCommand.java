@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import longfrog.task.Deadline;
-import longfrog.task.Event;
 import longfrog.task.Task;
 import longfrog.task.TaskList;
 import longfrog.ui.Ui;
@@ -38,19 +36,8 @@ public class DateCommand implements Command {
                 continue;
             }
 
-            if (task instanceof Deadline) {
-                Deadline deadline = (Deadline) task;
-                if (deadline.getBy().toLocalDate().equals(targetDate)) {
-                    matchingTasks.add(task);
-                }
-            } else if (task instanceof Event) {
-                Event event = (Event) task;
-                LocalDate fromDate = event.getFrom().toLocalDate();
-                LocalDate toDate = event.getTo().toLocalDate();
-
-                if (!targetDate.isBefore(fromDate) && !targetDate.isAfter(toDate)) {
-                    matchingTasks.add(task);
-                }
+            if (task.occursOn(targetDate)) {
+                matchingTasks.add(task);
             }
         }
 

@@ -1,5 +1,7 @@
 package longfrog.task;
 
+import java.time.LocalDate;
+
 /** Represents a task with a name and completion state. */
 public abstract class Task {
     protected String name;
@@ -41,6 +43,18 @@ public abstract class Task {
     /** Marks this task as incomplete. */
     public void unmarkAsDone() {
         isDone = false;
+    }
+
+    /**
+     * Checks whether this task occurs on a date.
+     *
+     * <p>Tasks without date information do not occur on any specific date.</p>
+     *
+     * @param date the date to check
+     * @return whether this task occurs on the date
+     */
+    public boolean occursOn(LocalDate date) {
+        return false;
     }
 
     /**
