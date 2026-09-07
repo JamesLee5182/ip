@@ -1,8 +1,11 @@
 package longfrog.ui;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Consumer;
+
+import longfrog.task.Task;
 
 /**
  * Handles all console input and output for Longfrog.
@@ -53,6 +56,17 @@ public class Ui {
     /** Displays a message on the console. */
     public void showMessage(String message) {
         messageConsumer.accept(message);
+    }
+
+    /**
+     * Displays tasks as a one-based numbered list.
+     *
+     * @param tasks the tasks to display
+     */
+    public void showNumberedTasks(List<Task> tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            showMessage((i + 1) + ": " + tasks.get(i));
+        }
     }
 
     /** Displays the separator used around command responses. */

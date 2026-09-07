@@ -1,5 +1,6 @@
 package longfrog.task;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import longfrog.util.FormatUtils;
@@ -26,6 +27,17 @@ public class Deadline extends Task {
      */
     public LocalDateTime getBy() {
         return this.by;
+    }
+
+    /**
+     * Checks whether this deadline is due on a date.
+     *
+     * @param date the date to check
+     * @return whether the deadline is due on the date
+     */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        return by.toLocalDate().equals(date);
     }
 
     /**

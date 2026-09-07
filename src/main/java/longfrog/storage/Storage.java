@@ -51,20 +51,19 @@ public class Storage {
                 return tasks;
             }
 
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine().trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine().trim();
+                    if (line.isEmpty()) {
+                        continue;
+                    }
 
-                Task task = parseLine(line);
-                if (task != null) {
-                    tasks.add(task);
+                    Task task = parseLine(line);
+                    if (task != null) {
+                        tasks.add(task);
+                    }
                 }
             }
-            scanner.close();
-
         } catch (IOException e) {
             throw new LongfrogException("Unable to load save file.");
         }
@@ -138,12 +137,12 @@ public class Storage {
                 file.getParentFile().mkdirs();
             }
 
-            FileWriter writer = new FileWriter(file);
-            for (Task task : tasks) {
-                assert task != null : "Task list must not contain null entries";
-                writer.write(task.toFileFormat() + System.lineSeparator());
+            try (FileWriter writer = new FileWriter(file)) {
+                for (Task task : tasks) {
+                    assert task != null : "Task list must not contain null entries";
+                    writer.write(task.toFileFormat() + System.lineSeparator());
+                }
             }
-            writer.close();
             return true;
         } catch (IOException e) {
             return false;

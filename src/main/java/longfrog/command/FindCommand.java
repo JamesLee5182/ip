@@ -26,7 +26,7 @@ public class FindCommand implements Command {
     /** Displays matching tasks in their original task-list order. */
     @Override
     public boolean execute(Ui ui) {
-        List<Task> matchingTasks = taskList.getAll().stream()
+        List<Task> matchingTasks = taskList.getTasks().stream()
                 .filter(task -> task.getName().toLowerCase(Locale.ROOT).contains(keyword))
                 .toList();
 
@@ -34,9 +34,7 @@ public class FindCommand implements Command {
             ui.showMessage("Search returned zero matches. The pond is quiet.");
         } else {
             ui.showMessage("Search algorithm complete. Matching specimens:");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                ui.showMessage((i + 1) + ": " + matchingTasks.get(i));
-            }
+            ui.showNumberedTasks(matchingTasks);
         }
 
         return false;

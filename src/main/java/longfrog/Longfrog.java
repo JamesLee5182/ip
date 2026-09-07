@@ -92,7 +92,7 @@ public class Longfrog {
             assert command != null : "Parser must return a command for valid input";
 
             boolean isExit = command.execute(outputUi);
-            if (!storage.save(taskList.getAll())) {
+            if (!storage.save(taskList.getTasks())) {
                 outputUi.showSavingError();
             }
             return isExit;

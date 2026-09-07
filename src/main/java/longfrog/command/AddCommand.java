@@ -22,7 +22,7 @@ public class AddCommand implements Command {
     /** Adds the task and displays a confirmation. */
     @Override
     public boolean execute(Ui ui) {
-        taskList.addToList(task);
+        taskList.addTask(task);
         ui.showMessage("Ribbit! Task compiled into the list: " + task);
         return false;
     }
