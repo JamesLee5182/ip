@@ -1,6 +1,5 @@
 package longfrog.command;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,13 +26,9 @@ public class FindCommand implements Command {
     /** Displays matching tasks in their original task-list order. */
     @Override
     public boolean execute(Ui ui) {
-        List<Task> matchingTasks = new ArrayList<>();
-        for (int i = 0; i < taskList.getCount(); i++) {
-            Task task = taskList.getTask(i);
-            if (task != null && task.getName().toLowerCase(Locale.ROOT).contains(keyword)) {
-                matchingTasks.add(task);
-            }
-        }
+        List<Task> matchingTasks = taskList.getAll().stream()
+                .filter(task -> task.getName().toLowerCase(Locale.ROOT).contains(keyword))
+                .toList();
 
         if (matchingTasks.isEmpty()) {
             ui.showMessage("Search returned zero matches. The pond is quiet.");

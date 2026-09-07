@@ -1,5 +1,6 @@
 package longfrog.parser;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -30,12 +31,8 @@ public enum CommandType {
      * @return the matching command type, or an empty result for an unknown keyword
      */
     public static Optional<CommandType> fromKeyword(String keyword) {
-        for (CommandType commandType : values()) {
-            if (commandType.keyword.equalsIgnoreCase(keyword)) {
-                return Optional.of(commandType);
-            }
-        }
-
-        return Optional.empty();
+        return Arrays.stream(values())
+                .filter(commandType -> commandType.keyword.equalsIgnoreCase(keyword))
+                .findFirst();
     }
 }
