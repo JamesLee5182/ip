@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +32,25 @@ class TaskListTest {
         assertEquals(1, taskList.getCount());
         assertSame(todo, taskList.getTask(0));
         assertEquals(1, taskList.getAll().size());
+    }
+
+    @Test
+    void addToList_nullTask_violatesTaskListInvariant() {
+        TaskList taskList = new TaskList();
+
+        AssertionError error = assertThrows(AssertionError.class, () -> taskList.addToList(null));
+
+        assertEquals("Task list must not contain null entries", error.getMessage());
+        assertTrue(taskList.getAll().isEmpty());
+    }
+
+    @Test
+    void constructor_loadedTasksContainingNull_violatesTaskListInvariant() {
+        List<Task> loadedTasks = Arrays.asList(new Todo("read book"), null);
+
+        AssertionError error = assertThrows(AssertionError.class, () -> new TaskList(loadedTasks));
+
+        assertEquals("Loaded task list must not contain null entries", error.getMessage());
     }
 
     @Test

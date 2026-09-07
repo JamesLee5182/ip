@@ -37,6 +37,8 @@ public class Parser {
      * @throws LongfrogException if the input is not a complete, supported command.
      */
     public Command parse(String fullInput) throws LongfrogException {
+        assert fullInput != null : "Parser input must be supplied by the UI";
+
         String cleanInput = fullInput.trim();
         if (cleanInput.isEmpty()) {
             throw new LongfrogException("Input buffer is empty. Please enter a command, ribbit.");
@@ -125,7 +127,10 @@ public class Parser {
         if (words.length < 2 || words[1].isBlank()) {
             throw new LongfrogException("Syntax error. Expected: " + usage);
         }
-        return words[1].trim();
+
+        String argument = words[1].trim();
+        assert !argument.isEmpty() : "Validated command argument must not be empty";
+        return argument;
     }
 
     /**
@@ -188,7 +193,10 @@ public class Parser {
             if (userIndex <= 0) {
                 throw new LongfrogException("Index underflow: task numbers start at 1.");
             }
-            return userIndex - 1;
+
+            int zeroBasedIndex = userIndex - 1;
+            assert zeroBasedIndex >= 0 : "Validated task index must be non-negative";
+            return zeroBasedIndex;
         } catch (NumberFormatException e) {
             throw new LongfrogException("Type mismatch: task number must be an integer.");
         }

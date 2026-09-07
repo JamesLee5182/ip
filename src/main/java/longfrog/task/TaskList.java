@@ -23,6 +23,8 @@ public class TaskList {
      * Creates a task list with the specified list of tasks
      */
     public TaskList(List<Task> loadedTasks) {
+        assert loadedTasks == null || !loadedTasks.contains(null)
+                : "Loaded task list must not contain null entries";
         this.list = loadedTasks != null ? loadedTasks : new ArrayList<>();
     }
 
@@ -50,6 +52,7 @@ public class TaskList {
      * @param task the task to add
      */
     public void addToList(Task task) {
+        assert task != null : "Task list must not contain null entries";
         list.add(task);
     }
 
@@ -88,6 +91,8 @@ public class TaskList {
             return null;
         }
 
-        return list.get(index);
+        Task task = list.get(index);
+        assert task != null : "Task list must not contain null entries";
+        return task;
     }
 }
