@@ -1,7 +1,6 @@
 package longfrog.command;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import longfrog.task.Task;
@@ -28,18 +27,9 @@ public class DateCommand implements Command {
     /** Finds matching deadlines and events and displays them through the UI. */
     @Override
     public boolean execute(Ui ui) {
-        List<Task> matchingTasks = new ArrayList<>();
-
-        for (int i = 0; i < taskList.getCount(); i++) {
-            Task task = taskList.getTask(i);
-            if (task == null) {
-                continue;
-            }
-
-            if (task.occursOn(targetDate)) {
-                matchingTasks.add(task);
-            }
-        }
+        List<Task> matchingTasks = taskList.getTasks().stream()
+                .filter(task -> task.occursOn(targetDate))
+                .toList();
 
         String formattedDate = targetDate.format(FormatUtils.DATE_ONLY_FORMAT);
         if (matchingTasks.isEmpty()) {
