@@ -1,7 +1,6 @@
 package longfrog.command;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import longfrog.task.Deadline;
@@ -30,29 +29,9 @@ public class DateCommand implements Command {
     /** Finds matching deadlines and events and displays them through the UI. */
     @Override
     public boolean execute(Ui ui) {
-        List<Task> matchingTasks = new ArrayList<>();
-
-        for (int i = 0; i < taskList.getCount(); i++) {
-            Task task = taskList.getTask(i);
-            if (task == null) {
-                continue;
-            }
-
-            if (task instanceof Deadline) {
-                Deadline deadline = (Deadline) task;
-                if (deadline.getBy().toLocalDate().equals(targetDate)) {
-                    matchingTasks.add(task);
-                }
-            } else if (task instanceof Event) {
-                Event event = (Event) task;
-                LocalDate fromDate = event.getFrom().toLocalDate();
-                LocalDate toDate = event.getTo().toLocalDate();
-
-                if (!targetDate.isBefore(fromDate) && !targetDate.isAfter(toDate)) {
-                    matchingTasks.add(task);
-                }
-            }
-        }
+        List<Task> matchingTasks = taskList.getAll().stream()
+                .filter(this::occursOnTargetDate)
+                .toList();
 
         String formattedDate = targetDate.format(FormatUtils.DATE_ONLY_FORMAT);
         if (matchingTasks.isEmpty()) {
@@ -62,6 +41,21 @@ public class DateCommand implements Command {
             for (int i = 0; i < matchingTasks.size(); i++) {
                 ui.showMessage((i + 1) + ": " + matchingTasks.get(i));
             }
+        }
+
+        return false;
+    }
+
+    /** Returns whether a deadline or event occurs on the selected date. */
+    private boolean occursOnTargetDate(Task task) {
+        if (task instanceof Deadline deadline) {
+            return deadline.getBy().toLocalDate().equals(targetDate);
+        }
+
+        if (task instanceof Event event) {
+            LocalDate fromDate = event.getFrom().toLocalDate();
+            LocalDate toDate = event.getTo().toLocalDate();
+            return !targetDate.isBefore(fromDate) && !targetDate.isAfter(toDate);
         }
 
         return false;
