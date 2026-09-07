@@ -66,6 +66,8 @@ public class DialogBox extends HBox {
      * Flips the dialog so the avatar appears before the message.
      */
     private void flip() {
+        assert getChildren().size() == 2 : "Dialog box must contain exactly a label and an avatar";
+
         ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
         Collections.reverse(children);
         getChildren().setAll(children);

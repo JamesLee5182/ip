@@ -129,6 +129,8 @@ public class Storage {
      * @return whether the tasks were saved successfully
      */
     public boolean save(List<Task> tasks) {
+        assert tasks != null : "Tasks to save must be supplied by the task list";
+
         try {
             File file = new File(filePath);
             if (file.getParentFile() != null) {
@@ -137,6 +139,7 @@ public class Storage {
 
             try (FileWriter writer = new FileWriter(file)) {
                 for (Task task : tasks) {
+                    assert task != null : "Task list must not contain null entries";
                     writer.write(task.toFileFormat() + System.lineSeparator());
                 }
             }

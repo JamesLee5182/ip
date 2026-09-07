@@ -84,8 +84,13 @@ public class Longfrog {
      * @return whether the command requested application exit
      */
     private boolean executeCommand(String input, Ui outputUi) {
+        assert input != null : "Command input must be supplied by the UI";
+        assert outputUi != null : "Command output UI must be available during execution";
+
         try {
             Command command = parser.parse(input);
+            assert command != null : "Parser must return a command for valid input";
+
             boolean isExit = command.execute(outputUi);
             if (!storage.save(taskList.getTasks())) {
                 outputUi.showSavingError();
