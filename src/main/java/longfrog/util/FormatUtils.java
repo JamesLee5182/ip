@@ -1,15 +1,22 @@
 package longfrog.util;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.Locale;
+import java.util.Map;
 
 /** Provides shared date and time formats for parsing, persistence, and display. */
 public class FormatUtils {
-    // Used for reading user input and saving/loading from the text file
+    /** Format used for command input and persistent task data. */
     public static final DateTimeFormatter INPUT_SAVE_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
-    // For date only
+    /** Format used for date-only commands and output. */
     public static final DateTimeFormatter DATE_ONLY_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy");
 
-    // Used for printing nicely to the UI
-    public static final DateTimeFormatter PRINT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
+    /** Locale-independent format used for human-readable date-time output. */
+    public static final DateTimeFormatter PRINT_FORMAT = new DateTimeFormatterBuilder()
+            .appendPattern("MMM dd yyyy, h:mm ")
+            .appendText(ChronoField.AMPM_OF_DAY, Map.of(0L, "am", 1L, "pm"))
+            .toFormatter(Locale.ENGLISH);
 }
