@@ -22,6 +22,15 @@ public class AddCommand implements Command {
     /** Adds the task and displays a confirmation. */
     @Override
     public boolean execute(Ui ui) {
+        int duplicateIndex = taskList.findDuplicateIndex(task);
+        if (duplicateIndex >= 0) {
+            Task existingTask = taskList.getTask(duplicateIndex);
+            assert existingTask != null : "Duplicate index must identify an existing task";
+            ui.showMessage("Duplicate detected; task already exists at position "
+                    + (duplicateIndex + 1) + ": " + existingTask);
+            return false;
+        }
+
         taskList.addTask(task);
         ui.showMessage("Ribbit! Task compiled into the list: " + task);
         return false;

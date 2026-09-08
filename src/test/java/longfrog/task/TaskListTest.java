@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -119,5 +120,30 @@ class TaskListTest {
         assertNull(taskList.removeTask(1));
         assertEquals(1, taskList.getCount());
         assertSame(todo, taskList.getTask(0));
+    }
+
+    @Test
+    void findDuplicateIndex_multipleMatches_returnsFirstMatch() {
+        TaskList taskList = new TaskList();
+        taskList.addTask(new Todo("first"));
+        taskList.addTask(new Todo("Read Book"));
+        taskList.addTask(new Todo("read   book"));
+
+        assertEquals(1, taskList.findDuplicateIndex(new Todo("READ BOOK")));
+        assertEquals(-1, taskList.findDuplicateIndex(new Todo("different")));
+    }
+
+    @Test
+    void countDuplicateEntries_multipleGroups_countsOccurrencesBeyondFirst() {
+        LocalDateTime deadlineTime = LocalDateTime.of(2024, 1, 2, 9, 0);
+        TaskList taskList = new TaskList(new ArrayList<>(List.of(
+                new Todo("Read Book"),
+                new Todo("read   book"),
+                new Todo("READ BOOK"),
+                new Deadline("submit", deadlineTime),
+                new Deadline("Submit", deadlineTime),
+                new Deadline("submit", deadlineTime.plusDays(1)))));
+
+        assertEquals(3, taskList.countDuplicateEntries());
     }
 }

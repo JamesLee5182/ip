@@ -30,6 +30,17 @@ public class Deadline extends Task {
     }
 
     /**
+     * Checks whether another task has the same description and deadline.
+     *
+     * @param other the task to compare with
+     * @return whether the tasks have the same duplicate identity
+     */
+    @Override
+    public boolean isDuplicateOf(Task other) {
+        return super.isDuplicateOf(other) && by.equals(((Deadline) other).by);
+    }
+
+    /**
      * Checks whether this deadline is due on a date.
      *
      * @param date the date to check

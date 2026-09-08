@@ -38,6 +38,7 @@ public class Main extends Application {
         mainWindow.setUserImage(userImage);
         mainWindow.setLongfrogImage(longfrogImage);
         mainWindow.setExitAction(stage::close);
+        mainWindow.showStartupWarning();
 
         Scene scene = new Scene(root);
         stage.setTitle("Longfrog");

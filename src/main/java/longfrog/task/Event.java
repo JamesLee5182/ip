@@ -42,6 +42,19 @@ public class Event extends Task {
     }
 
     /**
+     * Checks whether another task has the same description and time range.
+     *
+     * @param other the task to compare with
+     * @return whether the tasks have the same duplicate identity
+     */
+    @Override
+    public boolean isDuplicateOf(Task other) {
+        return super.isDuplicateOf(other)
+                && from.equals(((Event) other).from)
+                && to.equals(((Event) other).to);
+    }
+
+    /**
      * Checks whether this event's date range includes a date.
      *
      * @param date the date to check

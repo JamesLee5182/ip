@@ -28,6 +28,7 @@ public class MainWindow extends AnchorPane {
     private Image userImage;
     private Image longfrogImage;
     private Runnable exitAction;
+    private boolean isStartupWarningShown;
 
     /**
      * Binds the scroll position to the dialog container's height.
@@ -71,6 +72,18 @@ public class MainWindow extends AnchorPane {
      */
     public void setExitAction(Runnable exitAction) {
         this.exitAction = Objects.requireNonNull(exitAction);
+    }
+
+    /** Displays the saved-data warning once after all window dependencies have been injected. */
+    public void showStartupWarning() {
+        assert longfrog != null : "Longfrog model must be injected before showing startup messages";
+        assert longfrogImage != null : "Longfrog image must be injected before showing startup messages";
+
+        String startupWarning = longfrog.getStartupWarning();
+        if (!isStartupWarningShown && !startupWarning.isEmpty()) {
+            dialogContainer.getChildren().add(DialogBox.getLongfrogDialog(startupWarning, longfrogImage));
+            isStartupWarningShown = true;
+        }
     }
 
     /**

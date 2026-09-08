@@ -81,4 +81,39 @@ class TaskTest {
                 event.toString());
         assertEquals("E | 1 | new year event | 31/12/2024 2300 | 1/1/2025 0030", event.toFileFormat());
     }
+
+    @Test
+    void isDuplicateOf_todosWithNormalizedDescriptions_ignoresCaseWhitespaceAndCompletion() {
+        Todo original = new Todo("Read Book");
+        Todo equivalent = new Todo("  read   book  ");
+        equivalent.markAsDone();
+
+        assertTrue(original.isDuplicateOf(equivalent));
+        assertTrue(equivalent.isDuplicateOf(original));
+        assertTrue(new Todo("read\u2003book").isDuplicateOf(new Todo("read book")));
+        assertFalse(original.isDuplicateOf(new Todo("read book!")));
+        assertFalse(new Todo("caf\u00e9").isDuplicateOf(new Todo("cafe\u0301")));
+        assertFalse(original.isDuplicateOf(new Deadline("read book", LocalDateTime.of(2024, 1, 2, 9, 0))));
+        assertFalse(original.isDuplicateOf(null));
+    }
+
+    @Test
+    void isDuplicateOf_deadlines_comparesParsedDeadline() {
+        LocalDateTime deadlineTime = LocalDateTime.of(2024, 1, 2, 9, 0);
+        Deadline original = new Deadline("Submit Report", deadlineTime);
+
+        assertTrue(original.isDuplicateOf(new Deadline("submit   report", deadlineTime)));
+        assertFalse(original.isDuplicateOf(new Deadline("submit report", deadlineTime.plusMinutes(1))));
+    }
+
+    @Test
+    void isDuplicateOf_events_comparesCompleteTimeRange() {
+        LocalDateTime start = LocalDateTime.of(2024, 1, 2, 9, 0);
+        LocalDateTime end = LocalDateTime.of(2024, 1, 2, 10, 0);
+        Event original = new Event("Team Meeting", start, end);
+
+        assertTrue(original.isDuplicateOf(new Event("team meeting", start, end)));
+        assertFalse(original.isDuplicateOf(new Event("team meeting", start.plusMinutes(30), end)));
+        assertFalse(original.isDuplicateOf(new Event("team meeting", start, end.plusMinutes(30))));
+    }
 }

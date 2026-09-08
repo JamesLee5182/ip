@@ -57,6 +57,44 @@ public class TaskList {
     }
 
     /**
+     * Finds the first task with the same duplicate identity as a proposed task.
+     *
+     * @param proposedTask the task being considered for addition
+     * @return the zero-based index of the first duplicate, or {@code -1} when none exists
+     */
+    public int findDuplicateIndex(Task proposedTask) {
+        assert proposedTask != null : "Proposed task must not be null";
+
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).isDuplicateOf(proposedTask)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Counts task occurrences beyond the first occurrence of each duplicate identity.
+     *
+     * @return the number of duplicate entries in the list
+     */
+    public int countDuplicateEntries() {
+        int duplicateCount = 0;
+        for (int currentIndex = 0; currentIndex < tasks.size(); currentIndex++) {
+            Task currentTask = tasks.get(currentIndex);
+            for (int earlierIndex = 0; earlierIndex < currentIndex; earlierIndex++) {
+                if (tasks.get(earlierIndex).isDuplicateOf(currentTask)) {
+                    duplicateCount++;
+                    break;
+                }
+            }
+        }
+
+        return duplicateCount;
+    }
+
+    /**
      * Removes and returns the task at a zero-based index.
      *
      * @param index the zero-based task index

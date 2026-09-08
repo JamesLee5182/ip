@@ -93,4 +93,22 @@ class StorageTest {
 
         assertFalse(wasSaved);
     }
+
+    @Test
+    void load_duplicateEntries_preservesEveryEntryInOriginalOrder() throws IOException, LongfrogException {
+        Path saveFile = temporaryDirectory.resolve("tasks.txt");
+        String savedData = String.join(System.lineSeparator(),
+                "T | 0 | Read Book",
+                "T | 1 | read   book",
+                "T | 0 | final task");
+        Files.writeString(saveFile, savedData);
+
+        List<Task> loadedTasks = new Storage(saveFile.toString()).load();
+
+        assertEquals(3, loadedTasks.size());
+        assertEquals("T | 0 | Read Book", loadedTasks.get(0).toFileFormat());
+        assertEquals("T | 1 | read   book", loadedTasks.get(1).toFileFormat());
+        assertEquals("T | 0 | final task", loadedTasks.get(2).toFileFormat());
+        assertEquals(savedData, Files.readString(saveFile));
+    }
 }

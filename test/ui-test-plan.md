@@ -6,11 +6,14 @@ This file is the source of truth for console UI test cases run with the `test-ui
 
 - Launch command: `java -Dstdout.encoding=UTF-8 -cp out/production/ip longfrog.Longfrog` (compile current sources and run with Java 25).
 - Start a fresh session for each case, run cases in order, and stop after the first failure.
+- Before each case, preserve any existing `data/longfrog.txt`, use an empty save file unless the case defines a
+  fixture, and restore the original file after the session.
 - Compare the output literally, including blank lines and each 50-character `─` separator. User input is not console output.
 
 ## Shared console output
 
-Each session starts without printing a greeting or other startup output.
+Each session starts without printing a greeting or other startup output unless the test case defines an explicit
+startup warning.
 
 After every input, the corresponding expected response below is inserted literally into this block. If the response has multiple lines, it replaces `RESPONSE` in full.
 
@@ -162,4 +165,39 @@ The complete expected output is the startup output plus one response block per i
   | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
   | `date 2/12/2019` | `Temporal query complete for 2/12/2019:`<br>`1: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
   | `date 3/12/2019` | `Temporal query returned zero tasks for 3/12/2019.` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+
+### TC-012: Reject a duplicate task without changing the list
+
+- Aim: Verify automatic duplicate detection ignores description case and repeated whitespace while preserving the
+  original task.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `todo Read Book` | `Ribbit! Task compiled into the list: [T][ ] Read Book` |
+  | `todo read   book` | `Duplicate detected; task already exists at position 1: [T][ ] Read Book` |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] Read Book` |
+  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+
+### TC-013: Warn about duplicate tasks loaded from storage
+
+- Aim: Verify saved duplicates are preserved and reported once before the first command.
+- Save-file fixture for `data/longfrog.txt`:
+
+  ```text
+  T | 0 | Read Book
+  T | 1 | read   book
+  D | 0 | submit report | 2/12/2019 1800
+  D | 1 | SUBMIT REPORT | 2/12/2019 1800
+  ```
+
+- Before the first normal response block, expect this startup output exactly once:
+
+  ```text
+  Warning: 2 duplicate task entries detected in saved data. Existing entries were preserved.
+  ```
+
+  | Input | Expected output |
+  | --- | --- |
+  | `list` | `Task database snapshot:`<br>`1: [T][ ] Read Book`<br>`2: [T][X] read   book`<br>`3: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`4: [D][X] SUBMIT REPORT (by: Dec 02 2019, 6:00 pm)` |
   | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |

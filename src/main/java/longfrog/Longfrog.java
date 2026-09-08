@@ -19,6 +19,7 @@ public class Longfrog {
     private final List<String> responseMessages;
     private final Ui responseUi;
     private final Parser parser;
+    private final String startupWarning;
     private boolean exitRequested;
 
     /** Creates Longfrog using the supplied task storage file. */
@@ -36,10 +37,15 @@ public class Longfrog {
         }
         taskList = loadedTasks;
         parser = new Parser(taskList);
+        startupWarning = createDuplicateWarning(taskList.countDuplicateEntries());
     }
 
     /** Starts the command loop and continues until the user enters {@code bye}. */
     public void run() {
+        if (!startupWarning.isEmpty()) {
+            ui.showMessage(startupWarning);
+        }
+
         boolean isExit = false;
         while (!isExit) {
             String userInput = ui.readCommand();
@@ -77,6 +83,15 @@ public class Longfrog {
     }
 
     /**
+     * Returns the warning that should be displayed once when the user interface starts.
+     *
+     * @return the duplicate warning, or an empty string when the loaded data has no duplicates
+     */
+    public String getStartupWarning() {
+        return startupWarning;
+    }
+
+    /**
      * Executes a parsed command and persists any resulting task-list changes.
      *
      * @param input the raw command to execute
@@ -100,6 +115,22 @@ public class Longfrog {
             outputUi.showMessage(e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Creates a grammatically correct warning for duplicate entries loaded from storage.
+     *
+     * @param duplicateCount the number of occurrences beyond each first occurrence
+     * @return the warning, or an empty string when there are no duplicate entries
+     */
+    private String createDuplicateWarning(int duplicateCount) {
+        if (duplicateCount == 0) {
+            return "";
+        }
+
+        String entryLabel = duplicateCount == 1 ? "entry" : "entries";
+        return "Warning: " + duplicateCount + " duplicate task " + entryLabel
+                + " detected in saved data. Existing entries were preserved.";
     }
 
     /**

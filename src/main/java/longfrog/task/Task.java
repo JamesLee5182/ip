@@ -1,6 +1,7 @@
 package longfrog.task;
 
 import java.time.LocalDate;
+import java.util.Locale;
 
 /** Represents a task with a name and completion state. */
 public abstract class Task {
@@ -24,6 +25,21 @@ public abstract class Task {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * Checks whether another task has the same duplicate identity as this task.
+     *
+     * <p>Task type and normalized description form the common identity. Concrete task types add
+     * their date-time fields where applicable. Completion state is deliberately ignored.</p>
+     *
+     * @param other the task to compare with
+     * @return whether the tasks have the same duplicate identity
+     */
+    public boolean isDuplicateOf(Task other) {
+        return other != null
+                && getClass().equals(other.getClass())
+                && normalizeDescription(name).equals(normalizeDescription(other.name));
     }
 
     /**
@@ -71,4 +87,16 @@ public abstract class Task {
      * Formats the task as a delimited string for saving to disk.
      */
     public abstract String toFileFormat();
+
+    /**
+     * Normalizes a description solely for duplicate comparison.
+     *
+     * @param description the task description to normalize
+     * @return the normalized description
+     */
+    private static String normalizeDescription(String description) {
+        return description.strip()
+                .replaceAll("\\p{javaWhitespace}+", " ")
+                .toLowerCase(Locale.ROOT);
+    }
 }
