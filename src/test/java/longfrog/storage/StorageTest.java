@@ -3,12 +3,14 @@ package longfrog.storage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,13 @@ class StorageTest {
 
         assertTrue(Files.isRegularFile(saveFile));
         assertTrue(loadedTasks.isEmpty());
+    }
+
+    @Test
+    void load_pathThatIsDirectory_throwsLongfrogException() throws IOException {
+        Path directory = Files.createDirectory(temporaryDirectory.resolve("load-directory"));
+
+        assertThrows(LongfrogException.class, () -> new Storage(directory.toString()).load());
     }
 
     @Test
@@ -61,13 +70,16 @@ class StorageTest {
         Path saveFile = temporaryDirectory.resolve("tasks.txt");
         Files.writeString(saveFile, String.join(System.lineSeparator(),
                 "T | 0 | read book",
+                "",
                 "not a saved task",
                 "T | 0 | truncated | description",
                 "D | 1 | submit report | not a date",
                 "D | 0 | impossible date | 31/2/2025 1800",
+                "D | 0 | too many fields | 2/12/2019 1800 | extra",
                 "X | 0 | unknown type",
                 "E | 0 | reversed event | 2/12/2019 1800 | 2/12/2019 1400",
                 "E | 0 | zero-length event | 2/12/2019 1800 | 2/12/2019 1800",
+                "E | 0 | too few fields | 2/12/2019 1400",
                 "E | 1 | team meeting | 2/12/2019 1400 | 2/12/2019 1600"));
 
         List<Task> loadedTasks = new Storage(saveFile.toString()).load();
@@ -87,6 +99,30 @@ class StorageTest {
 
         assertTrue(wasSaved);
         assertEquals("T | 0 | new task" + System.lineSeparator(), Files.readString(saveFile));
+    }
+
+    @Test
+    void save_missingParentDirectory_createsDirectoriesAndFile() throws IOException {
+        Path saveFile = temporaryDirectory.resolve("new-save-directory/tasks.txt");
+
+        boolean wasSaved = new Storage(saveFile.toString()).save(List.of(new Todo("task")));
+
+        assertTrue(wasSaved);
+        assertEquals("T | 0 | task" + System.lineSeparator(), Files.readString(saveFile));
+    }
+
+    @Test
+    void save_nullTaskList_violatesStorageInvariant() {
+        Storage storage = new Storage(temporaryDirectory.resolve("tasks.txt").toString());
+
+        assertThrows(AssertionError.class, () -> storage.save(null));
+    }
+
+    @Test
+    void save_taskListContainingNull_violatesStorageInvariant() {
+        Storage storage = new Storage(temporaryDirectory.resolve("tasks.txt").toString());
+
+        assertThrows(AssertionError.class, () -> storage.save(Arrays.asList((Task) null)));
     }
 
     @Test

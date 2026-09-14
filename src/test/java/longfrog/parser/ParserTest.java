@@ -66,6 +66,11 @@ class ParserTest {
     }
 
     @Test
+    void parse_nullInput_violatesParserInvariant() {
+        assertThrows(AssertionError.class, () -> parser.parse(null));
+    }
+
+    @Test
     void parse_unknownCommand_throwsExceptionWithHelpfulMessage() {
         assertParseError("dance", "Unknown command token. My parser cannot compute that, ribbit.");
     }
@@ -86,6 +91,8 @@ class ParserTest {
 
     @Test
     void parse_deadlineWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
+        assertParseError("deadline /by 2/12/2019 1800",
+                "Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
         assertParseError("deadline submit report", "Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
         assertParseError("deadline submit report /by tomorrow",
                 "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
@@ -95,6 +102,8 @@ class ParserTest {
 
     @Test
     void parse_eventWithMissingOrInvalidTimes_throwsExceptionWithHelpfulMessage() {
+        assertParseError("event /from 2/12/2019 1400 /to 2/12/2019 1600",
+                "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
         assertParseError("event meeting /from 2/12/2019 1400",
                 "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
         assertParseError("event meeting /from tomorrow /to 2/12/2019 1600",
@@ -123,6 +132,7 @@ class ParserTest {
         assertParseError("unmark 0", "Index underflow: task numbers start at 1.");
         assertParseError("delete -1", "Index underflow: task numbers start at 1.");
         assertParseError("mark first", "Type mismatch: task number must be an integer.");
+        assertParseError("mark 999999999999999999999", "Type mismatch: task number must be an integer.");
     }
 
     private void assertParseError(String input, String expectedMessage) {

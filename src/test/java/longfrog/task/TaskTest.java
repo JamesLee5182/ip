@@ -48,6 +48,7 @@ class TaskTest {
         assertTrue(event.occursOn(targetDate));
         assertTrue(event.occursOn(targetDate.minusDays(1)));
         assertTrue(event.occursOn(targetDate.plusDays(1)));
+        assertFalse(event.occursOn(targetDate.minusDays(2)));
         assertFalse(event.occursOn(targetDate.plusDays(2)));
     }
 
@@ -106,6 +107,7 @@ class TaskTest {
         Deadline original = new Deadline("Submit Report", deadlineTime);
 
         assertTrue(original.isDuplicateOf(new Deadline("submit   report", deadlineTime)));
+        assertFalse(original.isDuplicateOf(new Deadline("different report", deadlineTime)));
         assertFalse(original.isDuplicateOf(new Deadline("submit report", deadlineTime.plusMinutes(1))));
     }
 
@@ -116,6 +118,7 @@ class TaskTest {
         Event original = new Event("Team Meeting", start, end);
 
         assertTrue(original.isDuplicateOf(new Event("team meeting", start, end)));
+        assertFalse(original.isDuplicateOf(new Event("different meeting", start, end)));
         assertFalse(original.isDuplicateOf(new Event("team meeting", start.plusMinutes(30), end)));
         assertFalse(original.isDuplicateOf(new Event("team meeting", start, end.plusMinutes(30))));
     }

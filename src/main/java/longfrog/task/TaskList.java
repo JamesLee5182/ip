@@ -2,6 +2,7 @@ package longfrog.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Stores the tasks in their display order.
@@ -23,7 +24,7 @@ public class TaskList {
      * Creates a task list with the specified list of tasks
      */
     public TaskList(List<Task> loadedTasks) {
-        assert loadedTasks == null || !loadedTasks.contains(null)
+        assert loadedTasks == null || loadedTasks.stream().noneMatch(Objects::isNull)
                 : "Loaded task list must not contain null entries";
         tasks = loadedTasks == null ? new ArrayList<>() : new ArrayList<>(loadedTasks);
     }

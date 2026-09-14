@@ -123,6 +123,22 @@ class TaskListTest {
     }
 
     @Test
+    void findDuplicateIndex_nullProposedTask_violatesTaskListInvariant() {
+        TaskList taskList = new TaskList();
+
+        assertThrows(AssertionError.class, () -> taskList.findDuplicateIndex(null));
+    }
+
+    @Test
+    void constructor_immutableLoadedTasks_copiesTasksWithoutQueryingForNull() {
+        Todo task = new Todo("read book");
+
+        TaskList taskList = new TaskList(List.of(task));
+
+        assertEquals(List.of(task), taskList.getTasks());
+    }
+
+    @Test
     void findDuplicateIndex_multipleMatches_returnsFirstMatch() {
         TaskList taskList = new TaskList();
         taskList.addTask(new Todo("first"));

@@ -4,7 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -45,6 +50,95 @@ class LongfrogTest {
 
         assertEquals("Pond secured. Rest well—ribbit.", longfrog.getResponse("bye"));
         assertTrue(longfrog.isExitRequested());
+
+        longfrog.getResponse("list");
+
+        assertFalse(longfrog.isExitRequested());
+    }
+
+    @Test
+    void run_listThenBye_writesFramedConsoleResponses() {
+        String input = "list" + System.lineSeparator() + "bye" + System.lineSeparator();
+        InputStream originalInput = System.in;
+        PrintStream originalOutput = System.out;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+            System.setIn(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+            System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
+
+            new Longfrog(temporaryDirectory.resolve(TASK_FILE_NAME).toString()).run();
+        } finally {
+            System.setIn(originalInput);
+            System.setOut(originalOutput);
+        }
+
+        String separator = "─".repeat(50);
+        String expectedOutput = String.join(System.lineSeparator(),
+                separator,
+                "Tasks currently on the lily pads:",
+                "The pond is clear—no tasks waiting.",
+                "",
+                separator,
+                "",
+                separator,
+                "Pond secured. Rest well—ribbit.",
+                "",
+                separator,
+                "",
+                "");
+        assertEquals(expectedOutput, output.toString(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void run_duplicateSavedTasks_displaysStartupWarningBeforeFirstResponse() throws IOException {
+        Path saveFile = temporaryDirectory.resolve(TASK_FILE_NAME);
+        Files.writeString(saveFile, String.join(System.lineSeparator(),
+                "T | 0 | Read Book",
+                "T | 1 | read book"));
+        String input = "bye" + System.lineSeparator();
+        InputStream originalInput = System.in;
+        PrintStream originalOutput = System.out;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+            System.setIn(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+            System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
+
+            new Longfrog(saveFile.toString()).run();
+        } finally {
+            System.setIn(originalInput);
+            System.setOut(originalOutput);
+        }
+
+        String separator = "─".repeat(50);
+        String expectedOutput = String.join(System.lineSeparator(),
+                "Warning: 1 duplicate task entry detected in saved data. Existing entries were preserved.",
+                separator,
+                "Pond secured. Rest well—ribbit.",
+                "",
+                separator,
+                "",
+                "");
+        assertEquals(expectedOutput, output.toString(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void constructorAndGetResponse_storagePathIsDirectory_reportsLoadAndSaveErrors() throws IOException {
+        Path directory = Files.createDirectory(temporaryDirectory.resolve("not-a-file"));
+        PrintStream originalOutput = System.out;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Longfrog longfrog;
+        try {
+            System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
+            longfrog = new Longfrog(directory.toString());
+        } finally {
+            System.setOut(originalOutput);
+        }
+
+        assertEquals("Warning: Save-file decoding failed. Booting with an empty task set."
+                + System.lineSeparator(), output.toString(StandardCharsets.UTF_8));
+        assertEquals("Task secured on the lily pad: [T][ ] swim" + System.lineSeparator()
+                + "I/O error: Task data could not be persisted to the pond archive.",
+                longfrog.getResponse("todo swim"));
     }
 
     @Test

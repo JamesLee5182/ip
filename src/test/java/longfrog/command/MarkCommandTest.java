@@ -15,6 +15,29 @@ import longfrog.ui.Ui;
 
 class MarkCommandTest {
     @Test
+    void execute_unfinishedTask_marksTaskAndReportsChange() {
+        Todo task = new Todo("swim");
+        TaskList taskList = new TaskList(List.of(task));
+        List<String> messages = new ArrayList<>();
+
+        boolean shouldExit = new MarkCommand(taskList, 0).execute(new Ui(messages::add));
+
+        assertFalse(shouldExit);
+        assertTrue(task.isDone());
+        assertEquals(List.of("Caught it. Marked done: swim"), messages);
+    }
+
+    @Test
+    void execute_emptyTaskList_reportsActionSpecificError() {
+        List<String> messages = new ArrayList<>();
+
+        boolean shouldExit = new MarkCommand(new TaskList(), 0).execute(new Ui(messages::add));
+
+        assertFalse(shouldExit);
+        assertEquals(List.of("The pond is clear—there are no tasks to mark."), messages);
+    }
+
+    @Test
     void execute_indexBeyondTaskList_reportsValidRange() {
         TaskList taskList = new TaskList(new ArrayList<>(List.of(new Todo("swim"))));
         List<String> messages = new ArrayList<>();
