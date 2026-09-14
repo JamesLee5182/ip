@@ -70,7 +70,7 @@ The complete expected output is the startup output plus one response block per i
   | Input | Expected output |
   | --- | --- |
   | `todo read book` | `Task secured on the lily pad: [T][ ] read book` |
-  | `mark 2` | `Index error: no task exists at that position. Ribbit.` |
+  | `mark 2` | `There is no task 2. Choose a task number from 1 to 1.` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] read book` |
   | `mark 1` | `Caught it. Marked done: read book` |
   | `unmark 0` | `Index underflow: task numbers start at 1.` |
@@ -135,7 +135,7 @@ The complete expected output is the startup output plus one response block per i
   | `todo first task` | `Task secured on the lily pad: [T][ ] first task` |
   | `todo second task` | `Task secured on the lily pad: [T][ ] second task` |
   | `todo third task` | `Task secured on the lily pad: [T][ ] third task` |
-  | `delete 4` | `Index error: no task exists at that position. Ribbit.` |
+  | `delete 4` | `There is no task 4. Choose a task number from 1 to 3.` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] first task`<br>`2: [T][ ] second task`<br>`3: [T][ ] third task` |
   | `delete 2` | `Released from the pond: second task` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
@@ -265,5 +265,21 @@ The complete expected output is the startup output plus one response block per i
   | `mark 1` | `That task is already marked done: swim` |
   | `unmark 1` | `Back into the pond: swim` |
   | `unmark 1` | `That task is already unfinished: swim` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] swim` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
+
+### TC-019: Report contextual task-number bounds
+
+- Aim: Verify invalid task numbers report empty-list context or the current valid range for every indexed command.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `mark 1` | `The pond is clear—there are no tasks to mark.` |
+  | `unmark 1` | `The pond is clear—there are no tasks to unmark.` |
+  | `delete 1` | `The pond is clear—there are no tasks to delete.` |
+  | `todo swim` | `Task secured on the lily pad: [T][ ] swim` |
+  | `mark 8` | `There is no task 8. Choose a task number from 1 to 1.` |
+  | `unmark 8` | `There is no task 8. Choose a task number from 1 to 1.` |
+  | `delete 8` | `There is no task 8. Choose a task number from 1 to 1.` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] swim` |
   | `bye` | `Pond secured. Rest well—ribbit.` |

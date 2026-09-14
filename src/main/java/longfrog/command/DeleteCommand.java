@@ -29,7 +29,7 @@ public class DeleteCommand implements Command {
     public boolean execute(Ui ui) {
         Task deletedTask = taskList.removeTask(index);
         if (deletedTask == null) {
-            ui.showMessage("Index error: no task exists at that position. Ribbit.");
+            ui.showInvalidTaskIndex(index, taskList.getCount(), "delete");
         } else {
             ui.showMessage("Released from the pond: " + deletedTask.getName());
         }

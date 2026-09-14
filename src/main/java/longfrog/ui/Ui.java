@@ -69,6 +69,27 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a contextual error for a task number outside the current list.
+     *
+     * @param index the invalid zero-based task index
+     * @param taskCount the number of available tasks
+     * @param action the command action that could not be performed
+     */
+    public void showInvalidTaskIndex(int index, int taskCount, String action) {
+        assert index >= 0 : "Parsed task indexes must be non-negative";
+        assert taskCount >= 0 : "Task count must not be negative";
+        assert action != null && !action.isBlank() : "A task action must be supplied";
+
+        if (taskCount == 0) {
+            showMessage("The pond is clear—there are no tasks to " + action + ".");
+            return;
+        }
+
+        showMessage("There is no task " + (index + 1)
+                + ". Choose a task number from 1 to " + taskCount + ".");
+    }
+
     /** Displays the separator used around command responses. */
     public void showLine() {
         showMessage(SEPARATOR);

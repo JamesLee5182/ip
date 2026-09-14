@@ -6,7 +6,8 @@ import longfrog.ui.Ui;
 
 /** Marks the selected task as incomplete. */
 public class UnmarkCommand implements Command {
-    private final Task task;
+    private final TaskList taskList;
+    private final int index;
 
     /**
      * Creates a command that marks the task at the specified index as unfinished.
@@ -15,14 +16,16 @@ public class UnmarkCommand implements Command {
      * @param index the zero-based task index
      */
     public UnmarkCommand(TaskList taskList, int index) {
-        this.task = taskList.getTask(index);
+        this.taskList = taskList;
+        this.index = index;
     }
 
     /** Unmarks the task and displays the outcome. */
     @Override
     public boolean execute(Ui ui) {
+        Task task = taskList.getTask(index);
         if (task == null) {
-            ui.showMessage("Index error: no task exists at that position. Ribbit.");
+            ui.showInvalidTaskIndex(index, taskList.getCount(), "unmark");
         } else if (!task.isDone()) {
             ui.showMessage("That task is already unfinished: " + task.getName());
         } else {

@@ -14,6 +14,16 @@ import longfrog.ui.Ui;
 
 class UnmarkCommandTest {
     @Test
+    void execute_emptyTaskList_reportsActionSpecificError() {
+        List<String> messages = new ArrayList<>();
+
+        boolean shouldExit = new UnmarkCommand(new TaskList(), 0).execute(new Ui(messages::add));
+
+        assertFalse(shouldExit);
+        assertEquals(List.of("The pond is clear—there are no tasks to unmark."), messages);
+    }
+
+    @Test
     void execute_unfinishedTask_preservesStateAndReportsNoChange() {
         Todo task = new Todo("swim");
         TaskList taskList = new TaskList(new ArrayList<>(List.of(task)));

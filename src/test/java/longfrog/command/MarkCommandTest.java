@@ -15,6 +15,17 @@ import longfrog.ui.Ui;
 
 class MarkCommandTest {
     @Test
+    void execute_indexBeyondTaskList_reportsValidRange() {
+        TaskList taskList = new TaskList(new ArrayList<>(List.of(new Todo("swim"))));
+        List<String> messages = new ArrayList<>();
+
+        boolean shouldExit = new MarkCommand(taskList, 7).execute(new Ui(messages::add));
+
+        assertFalse(shouldExit);
+        assertEquals(List.of("There is no task 8. Choose a task number from 1 to 1."), messages);
+    }
+
+    @Test
     void execute_completedTask_preservesStateAndReportsNoChange() {
         Todo task = new Todo("swim");
         task.markAsDone();
