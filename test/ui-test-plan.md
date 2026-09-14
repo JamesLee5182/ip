@@ -252,3 +252,18 @@ The complete expected output is the startup output plus one response block per i
   | `delete 1 extra` | `Syntax error. Expected: delete INDEX` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] read book` |
   | `bye` | `Pond secured. Rest well—ribbit.` |
+
+### TC-018: Reject redundant task-state changes
+
+- Aim: Verify completed tasks cannot be marked again and unfinished tasks cannot be unmarked.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `todo swim` | `Task secured on the lily pad: [T][ ] swim` |
+  | `unmark 1` | `That task is already unfinished: swim` |
+  | `mark 1` | `Caught it. Marked done: swim` |
+  | `mark 1` | `That task is already marked done: swim` |
+  | `unmark 1` | `Back into the pond: swim` |
+  | `unmark 1` | `That task is already unfinished: swim` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] swim` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |

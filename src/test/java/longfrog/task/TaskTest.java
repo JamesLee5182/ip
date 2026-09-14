@@ -14,6 +14,7 @@ class TaskTest {
     void todo_completionStateChanges_updatesStatusDisplayAndSaveFormat() {
         Todo todo = new Todo("read book");
 
+        assertFalse(todo.isDone());
         assertEquals("read book", todo.getName());
         assertEquals(" ", todo.getStatusIcon());
         assertEquals("[T][ ] read book", todo.toString());
@@ -21,12 +22,14 @@ class TaskTest {
 
         todo.markAsDone();
 
+        assertTrue(todo.isDone());
         assertEquals("X", todo.getStatusIcon());
         assertEquals("[T][X] read book", todo.toString());
         assertEquals("T | 1 | read book", todo.toFileFormat());
 
         todo.unmarkAsDone();
 
+        assertFalse(todo.isDone());
         assertEquals(" ", todo.getStatusIcon());
         assertEquals("[T][ ] read book", todo.toString());
         assertEquals("T | 0 | read book", todo.toFileFormat());
