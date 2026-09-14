@@ -18,7 +18,7 @@ public class MarkCommand implements Command {
             ui.showMessage("Index error: no task exists at that position. Ribbit.");
         } else {
             task.markAsDone();
-            ui.showMessage("Boolean state flipped to DONE: " + task.getName());
+            ui.showMessage("Caught it. Marked done: " + task.getName());
         }
 
         return false;

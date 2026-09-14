@@ -16,6 +16,27 @@ import longfrog.ui.Ui;
 
 class FindCommandTest {
     @Test
+    void execute_keywordMatchesOneDescription_usesSingularMatchLabel() {
+        TaskList taskList = new TaskList();
+        taskList.addTask(new Todo("read book"));
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PrintStream originalOutput = System.out;
+        try {
+            System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
+            new FindCommand(taskList, "read").execute(new Ui());
+        } finally {
+            System.setOut(originalOutput);
+        }
+
+        String expectedOutput = String.join(System.lineSeparator(),
+                "Found 1 matching ripple:",
+                "1: [T][ ] read book",
+                "");
+        assertEquals(expectedOutput, output.toString(StandardCharsets.UTF_8));
+    }
+
+    @Test
     void execute_keywordMatchesDescriptionsCaseInsensitively_preservesTaskOrder() {
         TaskList taskList = new TaskList();
         Todo firstTask = new Todo("read book");
@@ -36,7 +57,7 @@ class FindCommandTest {
         }
 
         String expectedOutput = String.join(System.lineSeparator(),
-                "Search algorithm complete. Matching specimens:",
+                "Found 2 matching ripples:",
                 "1: [T][X] read book",
                 "2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)",
                 "");
@@ -58,7 +79,7 @@ class FindCommandTest {
             System.setOut(originalOutput);
         }
 
-        assertEquals("Search returned zero matches. The pond is quiet." + System.lineSeparator(),
+        assertEquals("No ripples for “holiday”." + System.lineSeparator(),
                 output.toString(StandardCharsets.UTF_8));
     }
 }

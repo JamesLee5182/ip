@@ -18,7 +18,7 @@ public class UnmarkCommand implements Command {
             ui.showMessage("Index error: no task exists at that position. Ribbit.");
         } else {
             task.unmarkAsDone();
-            ui.showMessage("Boolean state reset to NOT DONE: " + task.getName());
+            ui.showMessage("Back into the pond: " + task.getName());
         }
 
         return false;
