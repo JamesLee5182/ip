@@ -91,16 +91,18 @@ public class Storage {
             Task task = null;
             switch (type) {
                 case "T":
-                    task = new Todo(name);
+                    if (parts.length == 3) {
+                        task = new Todo(name);
+                    }
                     break;
                 case "D":
-                    if (parts.length >= 4) {
+                    if (parts.length == 4) {
                         LocalDateTime by = LocalDateTime.parse(parts[3], FormatUtils.INPUT_SAVE_FORMAT);
                         task = new Deadline(name, by);
                     }
                     break;
                 case "E":
-                    if (parts.length >= 5) {
+                    if (parts.length == 5) {
                         LocalDateTime from = LocalDateTime.parse(parts[3], FormatUtils.INPUT_SAVE_FORMAT);
                         LocalDateTime to = LocalDateTime.parse(parts[4], FormatUtils.INPUT_SAVE_FORMAT);
                         if (from.isBefore(to)) {

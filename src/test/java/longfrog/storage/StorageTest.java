@@ -62,6 +62,7 @@ class StorageTest {
         Files.writeString(saveFile, String.join(System.lineSeparator(),
                 "T | 0 | read book",
                 "not a saved task",
+                "T | 0 | truncated | description",
                 "D | 1 | submit report | not a date",
                 "D | 0 | impossible date | 31/2/2025 1800",
                 "X | 0 | unknown type",

@@ -225,3 +225,15 @@ The complete expected output is the startup output plus one response block per i
   | `date 31/4/2025` | `Temporal parsing failed. Expected: d/M/yyyy (e.g., 2/12/2019)` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [D][ ] leap-day task (by: Feb 29 2024, 6:00 pm)` |
   | `bye` | `Pond secured. Rest well—ribbit.` |
+
+### TC-016: Reject the save-file delimiter in task descriptions
+
+- Aim: Verify task descriptions cannot contain the reserved `|` delimiter or corrupt persisted task fields.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `todo compare A | B` | `Task descriptions cannot contain “|” because it is reserved for storage.` |
+  | `deadline compare A | B /by 2/12/2019 1800` | `Task descriptions cannot contain “|” because it is reserved for storage.` |
+  | `event compare A | B /from 2/12/2019 1400 /to 2/12/2019 1600` | `Task descriptions cannot contain “|” because it is reserved for storage.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`The pond is clear—no tasks waiting.` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |

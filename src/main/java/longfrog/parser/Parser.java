@@ -90,6 +90,7 @@ public class Parser {
      */
     private Command parseTodoCommand(String[] words) throws LongfrogException {
         String taskName = getArgument(words, TODO_USAGE);
+        validateTaskName(taskName);
         return new AddCommand(taskList, new Todo(taskName));
     }
 
@@ -104,6 +105,7 @@ public class Parser {
         String argument = getArgument(words, DEADLINE_USAGE);
         String[] deadlineParts = splitArgument(argument, " /by ", DEADLINE_USAGE);
         String taskName = deadlineParts[0].trim();
+        validateTaskName(taskName);
         LocalDateTime deadline = parseDateTime(deadlineParts[1].trim());
 
         return new AddCommand(taskList, new Deadline(taskName, deadline));
@@ -122,6 +124,7 @@ public class Parser {
         String[] timeParts = splitArgument(eventParts[1], " /to ", EVENT_USAGE);
 
         String taskName = eventParts[0].trim();
+        validateTaskName(taskName);
         LocalDateTime start = parseDateTime(timeParts[0].trim());
         LocalDateTime end = parseDateTime(timeParts[1].trim());
         if (!start.isBefore(end)) {
@@ -130,6 +133,19 @@ public class Parser {
         }
 
         return new AddCommand(taskList, new Event(taskName, start, end));
+    }
+
+    /**
+     * Rejects task names containing the delimiter reserved by the save-file format.
+     *
+     * @param taskName the proposed task description
+     * @throws LongfrogException if the description contains the reserved delimiter
+     */
+    private void validateTaskName(String taskName) throws LongfrogException {
+        if (taskName.contains("|")) {
+            throw new LongfrogException(
+                    "Task descriptions cannot contain “|” because it is reserved for storage.");
+        }
     }
 
     /**

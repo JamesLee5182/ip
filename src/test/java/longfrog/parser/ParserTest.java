@@ -67,6 +67,15 @@ class ParserTest {
     }
 
     @Test
+    void parse_taskDescriptionContainingStorageDelimiter_throwsException() {
+        String expectedMessage = "Task descriptions cannot contain “|” because it is reserved for storage.";
+
+        assertParseError("todo compare A | B", expectedMessage);
+        assertParseError("deadline compare A | B /by 2/12/2019 1800", expectedMessage);
+        assertParseError("event compare A | B /from 2/12/2019 1400 /to 2/12/2019 1600", expectedMessage);
+    }
+
+    @Test
     void parse_deadlineWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
         assertParseError("deadline submit report", "Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
         assertParseError("deadline submit report /by tomorrow",
