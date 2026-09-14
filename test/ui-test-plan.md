@@ -201,3 +201,15 @@ The complete expected output is the startup output plus one response block per i
   | --- | --- |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] Read Book`<br>`2: [T][X] read   book`<br>`3: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`4: [D][X] SUBMIT REPORT (by: Dec 02 2019, 6:00 pm)` |
   | `bye` | `Pond secured. Rest well—ribbit.` |
+
+### TC-014: Reject invalid event time ranges
+
+- Aim: Verify an event must have a start strictly before its end while allowing a range that crosses midnight.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `event overnight /from 2/12/2019 2300 /to 3/12/2019 0100` | `Task secured on the lily pad: [E][ ] overnight (from: Dec 02 2019, 11:00 pm to: Dec 03 2019, 1:00 am)` |
+  | `event reverse /from 2/12/2019 1800 /to 2/12/2019 1400` | `This event must end after it begins. Check the /from and /to times.` |
+  | `event zero /from 2/12/2019 1800 /to 2/12/2019 1800` | `This event must end after it begins. Check the /from and /to times.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [E][ ] overnight (from: Dec 02 2019, 11:00 pm to: Dec 03 2019, 1:00 am)` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |

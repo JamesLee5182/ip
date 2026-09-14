@@ -103,7 +103,9 @@ public class Storage {
                     if (parts.length >= 5) {
                         LocalDateTime from = LocalDateTime.parse(parts[3], FormatUtils.INPUT_SAVE_FORMAT);
                         LocalDateTime to = LocalDateTime.parse(parts[4], FormatUtils.INPUT_SAVE_FORMAT);
-                        task = new Event(name, from, to);
+                        if (from.isBefore(to)) {
+                            task = new Event(name, from, to);
+                        }
                     }
                     break;
                 default:

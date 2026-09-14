@@ -79,6 +79,10 @@ class ParserTest {
                 "Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
         assertParseError("event meeting /from tomorrow /to 2/12/2019 1600",
                 "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
+        assertParseError("event meeting /from 2/12/2019 1800 /to 2/12/2019 1400",
+                "This event must end after it begins. Check the /from and /to times.");
+        assertParseError("event meeting /from 2/12/2019 1800 /to 2/12/2019 1800",
+                "This event must end after it begins. Check the /from and /to times.");
     }
 
     @Test

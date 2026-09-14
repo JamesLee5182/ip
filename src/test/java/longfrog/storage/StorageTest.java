@@ -64,6 +64,8 @@ class StorageTest {
                 "not a saved task",
                 "D | 1 | submit report | not a date",
                 "X | 0 | unknown type",
+                "E | 0 | reversed event | 2/12/2019 1800 | 2/12/2019 1400",
+                "E | 0 | zero-length event | 2/12/2019 1800 | 2/12/2019 1800",
                 "E | 1 | team meeting | 2/12/2019 1400 | 2/12/2019 1600"));
 
         List<Task> loadedTasks = new Storage(saveFile.toString()).load();

@@ -124,6 +124,10 @@ public class Parser {
         String taskName = eventParts[0].trim();
         LocalDateTime start = parseDateTime(timeParts[0].trim());
         LocalDateTime end = parseDateTime(timeParts[1].trim());
+        if (!start.isBefore(end)) {
+            throw new LongfrogException(
+                    "This event must end after it begins. Check the /from and /to times.");
+        }
 
         return new AddCommand(taskList, new Event(taskName, start, end));
     }
