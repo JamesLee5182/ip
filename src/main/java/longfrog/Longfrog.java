@@ -20,7 +20,7 @@ public class Longfrog {
     private final Ui responseUi;
     private final Parser parser;
     private final String startupWarning;
-    private boolean exitRequested;
+    private boolean isExitRequested;
 
     /** Creates Longfrog using the supplied task storage file. */
     public Longfrog(String filePath) {
@@ -69,7 +69,7 @@ public class Longfrog {
      */
     public String getResponse(String input) {
         responseMessages.clear();
-        exitRequested = executeCommand(input, responseUi);
+        isExitRequested = executeCommand(input, responseUi);
         return String.join(System.lineSeparator(), responseMessages);
     }
 
@@ -79,7 +79,7 @@ public class Longfrog {
      * @return whether the most recent command was {@code bye}
      */
     public boolean isExitRequested() {
-        return exitRequested;
+        return isExitRequested;
     }
 
     /**
