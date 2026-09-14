@@ -237,3 +237,18 @@ The complete expected output is the startup output plus one response block per i
   | `event compare A | B /from 2/12/2019 1400 /to 2/12/2019 1600` | `Task descriptions cannot contain “|” because it is reserved for storage.` |
   | `list` | `Tasks currently on the lily pads:`<br>`The pond is clear—no tasks waiting.` |
   | `bye` | `Pond secured. Rest well—ribbit.` |
+
+### TC-017: Reject unexpected command arguments
+
+- Aim: Verify no-argument and task-number commands reject trailing text without exiting or changing tasks.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `todo read book` | `Task secured on the lily pad: [T][ ] read book` |
+  | `list extra` | `Syntax error. Expected: list` |
+  | `bye later` | `Syntax error. Expected: bye` |
+  | `mark 1 extra` | `Syntax error. Expected: mark INDEX` |
+  | `unmark 1 extra` | `Syntax error. Expected: unmark INDEX` |
+  | `delete 1 extra` | `Syntax error. Expected: delete INDEX` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] read book` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |

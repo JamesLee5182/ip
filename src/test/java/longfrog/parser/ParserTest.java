@@ -52,6 +52,15 @@ class ParserTest {
     }
 
     @Test
+    void parse_commandWithUnexpectedArguments_throwsExceptionWithUsage() {
+        assertParseError("list extra", "Syntax error. Expected: list");
+        assertParseError("bye later", "Syntax error. Expected: bye");
+        assertParseError("mark 1 extra", "Syntax error. Expected: mark INDEX");
+        assertParseError("unmark 1 extra", "Syntax error. Expected: unmark INDEX");
+        assertParseError("delete 1 extra", "Syntax error. Expected: delete INDEX");
+    }
+
+    @Test
     void parse_blankInput_throwsExceptionWithHelpfulMessage() {
         assertParseError("   ", "Input buffer is empty. Please enter a command, ribbit.");
     }

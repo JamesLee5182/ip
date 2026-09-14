@@ -29,6 +29,11 @@ public class Parser {
     private static final String EVENT_USAGE = "event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm";
     private static final String DATE_USAGE = "date d/M/yyyy (e.g., date 2/12/2019)";
     private static final String FIND_USAGE = "find KEYWORD";
+    private static final String LIST_USAGE = "list";
+    private static final String BYE_USAGE = "bye";
+    private static final String MARK_USAGE = "mark INDEX";
+    private static final String UNMARK_USAGE = "unmark INDEX";
+    private static final String DELETE_USAGE = "delete INDEX";
 
     private final TaskList taskList;
 
@@ -57,6 +62,7 @@ public class Parser {
 
         switch (commandType) {
             case BYE:
+                validateNoArgument(words, BYE_USAGE);
                 return new ExitCommand();
             case TODO:
                 return parseTodoCommand(words);
@@ -65,13 +71,14 @@ public class Parser {
             case EVENT:
                 return parseEventCommand(words);
             case LIST:
+                validateNoArgument(words, LIST_USAGE);
                 return new ListCommand(this.taskList);
             case MARK:
-                return new MarkCommand(this.taskList, parseIndex(words));
+                return new MarkCommand(this.taskList, parseIndex(words, MARK_USAGE));
             case UNMARK:
-                return new UnmarkCommand(this.taskList, parseIndex(words));
+                return new UnmarkCommand(this.taskList, parseIndex(words, UNMARK_USAGE));
             case DELETE:
-                return new DeleteCommand(this.taskList, parseIndex(words));
+                return new DeleteCommand(this.taskList, parseIndex(words, DELETE_USAGE));
             case DATE:
                 return parseDateCommand(words);
             case FIND:
@@ -240,17 +247,37 @@ public class Parser {
     }
 
     /**
+     * Rejects trailing text supplied to a command that takes no arguments.
+     *
+     * @param words the command keyword and any unexpected argument
+     * @param usage the required command format
+     * @throws LongfrogException if an argument is present
+     */
+    private void validateNoArgument(String[] words, String usage) throws LongfrogException {
+        if (words.length > 1) {
+            throw new LongfrogException("Syntax error. Expected: " + usage);
+        }
+    }
+
+    /**
      * Extracts and validates the integer index from the command arguments.
      * @param words The split input array containing the keyword and argument.
+     * @param usage the required command format
      * @return The 0-based task index.
+     * @throws LongfrogException if the index is missing, malformed, or not positive
      */
-    private int parseIndex(String[] words) throws LongfrogException {
+    private int parseIndex(String[] words, String usage) throws LongfrogException {
         if (words.length < 2 || words[1].trim().isEmpty()) {
             throw new LongfrogException("Index argument missing. Try: " + words[0] + " 1");
         }
 
+        String indexArgument = words[1].trim();
+        if (indexArgument.split("\\s+").length > 1) {
+            throw new LongfrogException("Syntax error. Expected: " + usage);
+        }
+
         try {
-            int userIndex = Integer.parseInt(words[1].trim());
+            int userIndex = Integer.parseInt(indexArgument);
             if (userIndex <= 0) {
                 throw new LongfrogException("Index underflow: task numbers start at 1.");
             }
