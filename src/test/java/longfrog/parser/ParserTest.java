@@ -71,6 +71,8 @@ class ParserTest {
         assertParseError("deadline submit report", "Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm");
         assertParseError("deadline submit report /by tomorrow",
                 "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
+        assertParseError("deadline submit report /by 31/2/2025 1800",
+                "Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)");
     }
 
     @Test
@@ -89,6 +91,7 @@ class ParserTest {
     void parse_dateWithMissingOrInvalidDate_throwsExceptionWithHelpfulMessage() {
         assertParseError("date", "Syntax error. Expected: date d/M/yyyy (e.g., date 2/12/2019)");
         assertParseError("date tomorrow", "Temporal parsing failed. Expected: d/M/yyyy (e.g., 2/12/2019)");
+        assertParseError("date 29/2/2025", "Temporal parsing failed. Expected: d/M/yyyy (e.g., 2/12/2019)");
     }
 
     @Test

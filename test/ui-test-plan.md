@@ -213,3 +213,15 @@ The complete expected output is the startup output plus one response block per i
   | `event zero /from 2/12/2019 1800 /to 2/12/2019 1800` | `This event must end after it begins. Check the /from and /to times.` |
   | `list` | `Tasks currently on the lily pads:`<br>`1: [E][ ] overnight (from: Dec 02 2019, 11:00 pm to: Dec 03 2019, 1:00 am)` |
   | `bye` | `Pond secured. Rest well—ribbit.` |
+
+### TC-015: Reject impossible calendar dates
+
+- Aim: Verify strict date parsing accepts a valid leap day but rejects impossible dates without adding tasks.
+
+  | Input | Expected output |
+  | --- | --- |
+  | `deadline leap-day task /by 29/2/2024 1800` | `Task secured on the lily pad: [D][ ] leap-day task (by: Feb 29 2024, 6:00 pm)` |
+  | `deadline impossible /by 29/2/2025 1800` | `Temporal parsing failed. Expected: d/M/yyyy HHmm (e.g., 2/12/2019 1800)` |
+  | `date 31/4/2025` | `Temporal parsing failed. Expected: d/M/yyyy (e.g., 2/12/2019)` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [D][ ] leap-day task (by: Feb 29 2024, 6:00 pm)` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |

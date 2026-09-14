@@ -63,6 +63,7 @@ class StorageTest {
                 "T | 0 | read book",
                 "not a saved task",
                 "D | 1 | submit report | not a date",
+                "D | 0 | impossible date | 31/2/2025 1800",
                 "X | 0 | unknown type",
                 "E | 0 | reversed event | 2/12/2019 1800 | 2/12/2019 1400",
                 "E | 0 | zero-length event | 2/12/2019 1800 | 2/12/2019 1800",
