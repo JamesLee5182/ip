@@ -32,7 +32,7 @@ public class AddCommand implements Command {
         }
 
         taskList.addTask(task);
-        ui.showMessage("Ribbit! Task compiled into the list: " + task);
+        ui.showMessage("Task secured on the lily pad: " + task);
         return false;
     }
 }

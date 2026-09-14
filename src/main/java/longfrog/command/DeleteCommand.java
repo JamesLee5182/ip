@@ -31,7 +31,7 @@ public class DeleteCommand implements Command {
         if (deletedTask == null) {
             ui.showMessage("Index error: no task exists at that position. Ribbit.");
         } else {
-            ui.showMessage("Garbage collection complete; removed: " + deletedTask.getName());
+            ui.showMessage("Released from the pond: " + deletedTask.getName());
         }
 
         return false;

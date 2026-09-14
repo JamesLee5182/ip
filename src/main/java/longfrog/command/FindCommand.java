@@ -11,6 +11,7 @@ import longfrog.ui.Ui;
 public class FindCommand implements Command {
     private final TaskList taskList;
     private final String keyword;
+    private final String normalizedKeyword;
 
     /**
      * Creates a find command for a task-description keyword.
@@ -20,20 +21,22 @@ public class FindCommand implements Command {
      */
     public FindCommand(TaskList taskList, String keyword) {
         this.taskList = taskList;
-        this.keyword = keyword.toLowerCase(Locale.ROOT);
+        this.keyword = keyword;
+        this.normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
     }
 
     /** Displays matching tasks in their original task-list order. */
     @Override
     public boolean execute(Ui ui) {
         List<Task> matchingTasks = taskList.getTasks().stream()
-                .filter(task -> task.getName().toLowerCase(Locale.ROOT).contains(keyword))
+                .filter(task -> task.getName().toLowerCase(Locale.ROOT).contains(normalizedKeyword))
                 .toList();
 
         if (matchingTasks.isEmpty()) {
-            ui.showMessage("Search returned zero matches. The pond is quiet.");
+            ui.showMessage("No ripples for “" + keyword + "”.");
         } else {
-            ui.showMessage("Search algorithm complete. Matching specimens:");
+            String rippleLabel = matchingTasks.size() == 1 ? "ripple" : "ripples";
+            ui.showMessage("Found " + matchingTasks.size() + " matching " + rippleLabel + ":");
             ui.showNumberedTasks(matchingTasks);
         }
 

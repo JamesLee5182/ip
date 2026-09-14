@@ -35,8 +35,8 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `list` | `Task database snapshot:`<br>`No tasks detected; the queue is an empty set. Ribbit.` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`The pond is clear—no tasks waiting.` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-002: Add every supported task type and list them
 
@@ -44,11 +44,11 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
-  | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `event team meeting /from 2/12/2019 1400 /to 2/12/2019 1600` | `Ribbit! Task compiled into the list: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)`<br>`3: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `todo read book` | `Task secured on the lily pad: [T][ ] read book` |
+  | `deadline return book /by 2/12/2019 1800` | `Task secured on the lily pad: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `event team meeting /from 2/12/2019 1400 /to 2/12/2019 1600` | `Task secured on the lily pad: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)`<br>`3: [E][ ] team meeting (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-003: Mark and unmark an existing task
 
@@ -56,12 +56,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo submit assignment` | `Ribbit! Task compiled into the list: [T][ ] submit assignment` |
-  | `mark 1` | `Boolean state flipped to DONE: submit assignment` |
-  | `list` | `Task database snapshot:`<br>`1: [T][X] submit assignment` |
-  | `unmark 1` | `Boolean state reset to NOT DONE: submit assignment` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] submit assignment` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `todo submit assignment` | `Task secured on the lily pad: [T][ ] submit assignment` |
+  | `mark 1` | `Caught it. Marked done: submit assignment` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][X] submit assignment` |
+  | `unmark 1` | `Back into the pond: submit assignment` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] submit assignment` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-004: Reject missing task numbers without changing the list
 
@@ -69,13 +69,13 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
+  | `todo read book` | `Task secured on the lily pad: [T][ ] read book` |
   | `mark 2` | `Index error: no task exists at that position. Ribbit.` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] read book` |
-  | `mark 1` | `Boolean state flipped to DONE: read book` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] read book` |
+  | `mark 1` | `Caught it. Marked done: read book` |
   | `unmark 0` | `Index underflow: task numbers start at 1.` |
-  | `list` | `Task database snapshot:`<br>`1: [T][X] read book` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][X] read book` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-005: Reject empty and unknown commands without ending the session
 
@@ -83,12 +83,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
+  | `todo read book` | `Task secured on the lily pad: [T][ ] read book` |
   | `todo` | `Syntax error. Expected: todo TASK` |
   | _empty line_ | `Input buffer is empty. Please enter a command, ribbit.` |
   | `dance` | `Unknown command token. My parser cannot compute that, ribbit.` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] read book` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] read book` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-006: Reject incomplete deadline and event inputs without adding tasks
 
@@ -96,12 +96,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `deadline submit report /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)` |
+  | `deadline submit report /by 2/12/2019 1800` | `Task secured on the lily pad: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)` |
   | `deadline missing date` | `Syntax error. Expected: deadline TASK /by d/M/yyyy HHmm` |
-  | `event tutorial /from 2/12/2019 1400 /to 2/12/2019 1600` | `Ribbit! Task compiled into the list: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `event tutorial /from 2/12/2019 1400 /to 2/12/2019 1600` | `Task secured on the lily pad: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
   | `event missing end /from 2/12/2019 1400` | `Syntax error. Expected: event TASK /from d/M/yyyy HHmm /to d/M/yyyy HHmm` |
-  | `list` | `Task database snapshot:`<br>`1: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`2: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`2: [E][ ] tutorial (from: Dec 02 2019, 2:00 pm to: Dec 02 2019, 4:00 pm)` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-007: Reject malformed task-number inputs without changing completion state
 
@@ -109,12 +109,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo revise notes` | `Ribbit! Task compiled into the list: [T][ ] revise notes` |
+  | `todo revise notes` | `Task secured on the lily pad: [T][ ] revise notes` |
   | `mark first` | `Type mismatch: task number must be an integer.` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] revise notes` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] revise notes` |
   | `unmark` | `Index argument missing. Try: unmark 1` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] revise notes` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] revise notes` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-008: Accept command keywords regardless of letter case
 
@@ -122,9 +122,9 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `TODO Read Book` | `Ribbit! Task compiled into the list: [T][ ] Read Book` |
-  | `LIST` | `Task database snapshot:`<br>`1: [T][ ] Read Book` |
-  | `BYE` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `TODO Read Book` | `Task secured on the lily pad: [T][ ] Read Book` |
+  | `LIST` | `Tasks currently on the lily pads:`<br>`1: [T][ ] Read Book` |
+  | `BYE` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-009: Delete a task and preserve the remaining task order
 
@@ -132,16 +132,16 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo first task` | `Ribbit! Task compiled into the list: [T][ ] first task` |
-  | `todo second task` | `Ribbit! Task compiled into the list: [T][ ] second task` |
-  | `todo third task` | `Ribbit! Task compiled into the list: [T][ ] third task` |
+  | `todo first task` | `Task secured on the lily pad: [T][ ] first task` |
+  | `todo second task` | `Task secured on the lily pad: [T][ ] second task` |
+  | `todo third task` | `Task secured on the lily pad: [T][ ] third task` |
   | `delete 4` | `Index error: no task exists at that position. Ribbit.` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] first task`<br>`2: [T][ ] second task`<br>`3: [T][ ] third task` |
-  | `delete 2` | `Garbage collection complete; removed: second task` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] first task`<br>`2: [T][ ] second task`<br>`3: [T][ ] third task` |
+  | `delete 2` | `Released from the pond: second task` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
   | `delete` | `Index argument missing. Try: delete 1` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] first task`<br>`2: [T][ ] third task` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-010: Find tasks by a case-insensitive description keyword
 
@@ -149,12 +149,12 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo read book` | `Ribbit! Task compiled into the list: [T][ ] read book` |
-  | `todo go running` | `Ribbit! Task compiled into the list: [T][ ] go running` |
-  | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `find BOOK` | `Search algorithm complete. Matching specimens:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
-  | `find holiday` | `Search returned zero matches. The pond is quiet.` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `todo read book` | `Task secured on the lily pad: [T][ ] read book` |
+  | `todo go running` | `Task secured on the lily pad: [T][ ] go running` |
+  | `deadline return book /by 2/12/2019 1800` | `Task secured on the lily pad: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `find BOOK` | `Found 2 matching ripples:`<br>`1: [T][ ] read book`<br>`2: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `find holiday` | `No ripples for “holiday”.` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-011: Use the clearer date command
 
@@ -162,10 +162,10 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `deadline return book /by 2/12/2019 1800` | `Ribbit! Task compiled into the list: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
+  | `deadline return book /by 2/12/2019 1800` | `Task secured on the lily pad: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
   | `date 2/12/2019` | `Temporal query complete for 2/12/2019:`<br>`1: [D][ ] return book (by: Dec 02 2019, 6:00 pm)` |
   | `date 3/12/2019` | `Temporal query returned zero tasks for 3/12/2019.` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-012: Reject a duplicate task without changing the list
 
@@ -174,10 +174,10 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `todo Read Book` | `Ribbit! Task compiled into the list: [T][ ] Read Book` |
+  | `todo Read Book` | `Task secured on the lily pad: [T][ ] Read Book` |
   | `todo read   book` | `Duplicate detected; task already exists at position 1: [T][ ] Read Book` |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] Read Book` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] Read Book` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |
 
 ### TC-013: Warn about duplicate tasks loaded from storage
 
@@ -199,5 +199,5 @@ The complete expected output is the startup output plus one response block per i
 
   | Input | Expected output |
   | --- | --- |
-  | `list` | `Task database snapshot:`<br>`1: [T][ ] Read Book`<br>`2: [T][X] read   book`<br>`3: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`4: [D][X] SUBMIT REPORT (by: Dec 02 2019, 6:00 pm)` |
-  | `bye` | `Ribbit and good night! Shutting down the lily-pad terminal.` |
+  | `list` | `Tasks currently on the lily pads:`<br>`1: [T][ ] Read Book`<br>`2: [T][X] read   book`<br>`3: [D][ ] submit report (by: Dec 02 2019, 6:00 pm)`<br>`4: [D][X] SUBMIT REPORT (by: Dec 02 2019, 6:00 pm)` |
+  | `bye` | `Pond secured. Rest well—ribbit.` |

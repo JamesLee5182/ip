@@ -40,7 +40,7 @@ public class Ui {
 
     /** Displays the farewell message. */
     public void showExitMessage() {
-        showMessage("Ribbit and good night! Shutting down the lily-pad terminal.");
+        showMessage("Pond secured. Rest well—ribbit.");
     }
 
     /** Displays a message when saved tasks cannot be loaded. */

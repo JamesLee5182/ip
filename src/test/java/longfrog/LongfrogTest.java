@@ -23,8 +23,8 @@ class LongfrogTest {
 
         String response = longfrog.getResponse("todo read book");
 
-        assertEquals("Ribbit! Task compiled into the list: [T][ ] read book", response);
-        assertEquals("Task database snapshot:" + System.lineSeparator() + "1: [T][ ] read book",
+        assertEquals("Task secured on the lily pad: [T][ ] read book", response);
+        assertEquals("Tasks currently on the lily pads:" + System.lineSeparator() + "1: [T][ ] read book",
                 longfrog.getResponse("list"));
         assertFalse(longfrog.isExitRequested());
     }
@@ -35,15 +35,15 @@ class LongfrogTest {
 
         assertEquals("Unknown command token. My parser cannot compute that, ribbit.",
                 longfrog.getResponse("dance"));
-        assertEquals("Task database snapshot:" + System.lineSeparator()
-                + "No tasks detected; the queue is an empty set. Ribbit.", longfrog.getResponse("list"));
+        assertEquals("Tasks currently on the lily pads:" + System.lineSeparator()
+                + "The pond is clear—no tasks waiting.", longfrog.getResponse("list"));
     }
 
     @Test
     void getResponse_byeCommand_returnsFarewellAndRequestsExit() {
         Longfrog longfrog = createLongfrog();
 
-        assertEquals("Ribbit and good night! Shutting down the lily-pad terminal.", longfrog.getResponse("bye"));
+        assertEquals("Pond secured. Rest well—ribbit.", longfrog.getResponse("bye"));
         assertTrue(longfrog.isExitRequested());
     }
 
@@ -54,7 +54,7 @@ class LongfrogTest {
 
         assertEquals("Duplicate detected; task already exists at position 1: [T][ ] Read Book",
                 longfrog.getResponse("todo read   book"));
-        assertEquals("Task database snapshot:" + System.lineSeparator() + "1: [T][ ] Read Book",
+        assertEquals("Tasks currently on the lily pads:" + System.lineSeparator() + "1: [T][ ] Read Book",
                 longfrog.getResponse("list"));
     }
 
@@ -70,7 +70,7 @@ class LongfrogTest {
 
         assertEquals("Warning: 2 duplicate task entries detected in saved data. Existing entries were preserved.",
                 longfrog.getStartupWarning());
-        assertEquals("Task database snapshot:" + System.lineSeparator()
+        assertEquals("Tasks currently on the lily pads:" + System.lineSeparator()
                 + "1: [T][ ] Read Book" + System.lineSeparator()
                 + "2: [T][X] read   book" + System.lineSeparator()
                 + "3: [T][ ] READ BOOK", longfrog.getResponse("list"));

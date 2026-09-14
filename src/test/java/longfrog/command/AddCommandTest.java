@@ -26,7 +26,7 @@ class AddCommandTest {
         assertFalse(shouldExit);
         assertEquals(1, taskList.getCount());
         assertSame(task, taskList.getTask(0));
-        assertEquals(List.of("Ribbit! Task compiled into the list: [T][ ] read book"), messages);
+        assertEquals(List.of("Task secured on the lily pad: [T][ ] read book"), messages);
     }
 
     @Test
