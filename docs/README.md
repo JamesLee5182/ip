@@ -3,7 +3,7 @@
 Longfrog is a desktop task manager for users who prefer typing short commands. It combines a command-line style
 workflow with a graphical chat interface and stores your tasks automatically between sessions.
 
-![Longfrog user interface](docs/Ui.png)
+![Longfrog user interface](Ui.png)
 
 ## Quick start
 
